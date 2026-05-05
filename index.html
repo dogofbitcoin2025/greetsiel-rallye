@@ -31,23 +31,15 @@
     padding: 16px 14px 40px;
   }
 
-/* === START SCREEN === */
-.start-screen {
-text-align: center;
-padding: 30px 16px;
-}
+.start-screen { text-align: center; padding: 30px 16px; }
 .start-emoji { font-size: 56px; margin-bottom: 10px; }
 .start-title {
-font-size: 28px;
-font-weight: 800;
-letter-spacing: -0.5px;
-margin: 0 0 8px;
+font-size: 28px; font-weight: 800;
+letter-spacing: -0.5px; margin: 0 0 8px;
 }
 .start-subtitle {
-font-size: 15px;
-color: #ffd166;
-font-weight: 500;
-margin-bottom: 24px;
+font-size: 15px; color: #ffd166;
+font-weight: 500; margin-bottom: 24px;
 }
 .start-card {
 background: rgba(255,255,255,0.08);
@@ -64,10 +56,7 @@ margin: 0 0 10px;
 font-size: 16px;
 color: #ffd166;
 }
-.start-card ul {
-margin: 0;
-padding-left: 18px;
-}
+.start-card ul { margin: 0; padding-left: 18px; }
 .start-card li { margin-bottom: 6px; }
 .name-input {
 width: 100%;
@@ -110,7 +99,6 @@ margin-top: 10px;
 font-family: inherit;
 }
 
-/* === STATION SCREEN === */
 .topbar {
 display: flex;
 justify-content: space-between;
@@ -119,9 +107,7 @@ padding: 8px 4px 16px;
 font-size: 13px;
 font-weight: 600;
 }
-.progress {
-color: rgba(255,255,255,0.65);
-}
+.progress { color: rgba(255,255,255,0.65); }
 .points {
 background: #ffd166;
 color: #0f3a55;
@@ -308,11 +294,7 @@ font-size: 15px;
 line-height: 1.55;
 }
 
-/* === FINAL SCREEN === */
-.final-screen {
-text-align: center;
-padding: 30px 16px;
-}
+.final-screen { text-align: center; padding: 30px 16px; }
 .final-emoji { font-size: 72px; margin-bottom: 12px; }
 .final-title {
 font-size: 30px;
@@ -398,16 +380,24 @@ cursor: pointer;
 <div class="app" id="app"></div>
 
 <script>
-// =============================================================
-// STATIONEN — Schnitzeljagd Greetsiel
-// Reihenfolge: Hinweis führt zum nächsten Ort, dort wird Aufgabe gelöst
-// =============================================================
 const STATIONEN = [
   {
     nr: 1,
+    title: "Otto's Wohnzimmer",
+    location: "Pilsumer Leuchtturm",
+    hint: "Eure Reise beginnt nicht in Greetsiel selbst, sondern in der weiten Marschlandschaft davor. Folgt der Straße Richtung Pilsum und sucht ein knallig gelb-rot geringeltes Wahrzeichen mitten auf der Wiese. Es wurde durch einen ostfriesischen Komiker zur Legende — sein Film aus dem Jahr 1989 machte den Turm zum 'Wohnzimmer'.",
+    type: "code",
+    typeLabel: "Rätsel",
+    task: "Der Pilsumer Leuchtturm wurde 1891 errichtet, aber bereits nach wenigen Jahrzehnten außer Dienst gestellt — er war zu niedrig. Otto Waalkes machte ihn mit seinem Film bekannt. <br><br><strong>In welchem Jahr wurde der Leuchtturm außer Betrieb genommen?</strong> (vierstellige Zahl)",
+    answer: "1915",
+    reveal: "Richtig! <strong>1915</strong> wurde der Pilsumer Leuchtturm außer Dienst gestellt — nach nur 24 Jahren Betrieb. Seine Aufgabe übernahm der weitaus höhere <strong>Campener Leuchtturm</strong> (63,30 m, höchster Deutschlands). Der Pilsumer wurde 1973 zum Kulturdenkmal erklärt. Seine Berühmtheit verdankt er Otto Waalkes' Film 'Otto – Der Außerfriesische' (1989).",
+    points: 100
+  },
+  {
+    nr: 2,
     title: "Tor zur Geschichte",
     location: "Zwillingsmühlen",
-    hint: "Folgt dem Weg vom Parkplatz Richtung Ortskern. Bevor ihr den Hafen erreicht, begrüßen euch zwei farbenfrohe Wächter — ungleiche Geschwister, die seit Jahrhunderten den Wind ernten. Die ältere wurde 1706 errichtet, ihre Schwester ist gut 150 Jahre jünger. Findet sie und löst die Aufgabe in ihrer Nähe.",
+    hint: "Vom Leuchtturm geht es weiter Richtung Greetsiel. Folgt dem Weg zum Ortskern. Bevor ihr den Hafen erreicht, begrüßen euch zwei farbenfrohe Wächter — ungleiche Geschwister, die seit Jahrhunderten den Wind ernten. Die ältere wurde 1706 errichtet, ihre Schwester ist gut 150 Jahre jünger.",
     type: "quiz",
     typeLabel: "Quiz",
     task: "Die Greetsieler Zwillingsmühlen sind das Wahrzeichen des Ortes. Beide Mühlen haben unterschiedliche Funktionen und eine bewegte Geschichte. <strong>Welcher Mühlentyp sind die Zwillingsmühlen?</strong>",
@@ -419,10 +409,10 @@ const STATIONEN = [
     ],
     correct: 1,
     reveal: "Richtig! Es sind <strong>Galerieholländer</strong> — eine Mühlenart, bei der nur die obere Kappe samt Flügeln gedreht werden kann. Die Galerie auf halber Höhe diente dem Müller, um die Flügel in den Wind zu stellen. Die rote Mühle stammt von 1706 (Wiederaufbau 1921), die grüne von 1856.",
-    points: 100
+    points: 130
   },
   {
-    nr: 2,
+    nr: 3,
     title: "Das stille Fundament",
     location: "Steinhaus",
     hint: "Verlasst die Mühlen und geht in Richtung des historischen Ortskerns. Sucht ein backsteinernes Gebäude, das wie ein Zeitzeuge wirkt — errichtet um 1600 auf den Fundamenten eines Vorgängerbaus aus dem späten 14. Jahrhundert. Es gehörte einst einer berühmten ostfriesischen Häuptlingsfamilie, die später Grafen und Fürsten stellte.",
@@ -434,18 +424,18 @@ const STATIONEN = [
     points: 150
   },
   {
-    nr: 3,
+    nr: 4,
     title: "Wo der Geist wohnt",
     location: "Evangelisch-reformierte Kirche",
     hint: "Kein Dorf ohne Gotteshaus. Sucht das schlichte Backsteingebäude im Ortskern — es ist evangelisch-reformiert geprägt, wie es im calvinistischen Ostfriesland Tradition hat. Auf dem Dachreiter findet ihr einen Hinweis auf das Alter der Glocke, die angeblich zu den ältesten Niedersachsens zählt.",
     type: "photo",
     typeLabel: "Foto-Aufgabe",
     task: "Macht ein <strong>Gruppenfoto</strong> vor dem Eingang der Kirche, auf dem alle Mitglieder eurer Gruppe zu sehen sind. Achtet darauf, dass das Kirchenportal im Hintergrund klar erkennbar ist. <em>Hinweis: Das Foto wird nur lokal auf eurem Gerät gespeichert.</em>",
-    reveal: "Sehr gut! Die evangelisch-reformierte Kirche Greetsiel wurde im 14. Jahrhundert errichtet. Reformiert bedeutet, dass die Gemeinde der calvinistischen Tradition folgt — typisch für Ostfriesland, das eine starke niederländisch geprägte reformierte Tradition hat (im Gegensatz zum überwiegend lutherischen Restdeutschland).",
+    reveal: "Sehr gut! Die evangelisch-reformierte Kirche Greetsiel wurde im 14. Jahrhundert errichtet. <strong>Reformiert</strong> bedeutet, dass die Gemeinde der calvinistischen Tradition folgt — typisch für Ostfriesland, das eine starke niederländisch geprägte reformierte Tradition hat (im Gegensatz zum überwiegend lutherischen Restdeutschland).",
     points: 80
   },
   {
-    nr: 4,
+    nr: 5,
     title: "Die rote Flotte",
     location: "Fischereihafen",
     hint: "Folgt eurer Nase! Der Geruch von Salzwasser, Fisch und Diesel führt euch zum wirtschaftlichen Herzstück des Ortes. Hier liegen die bunten Boote, die täglich (außer am Wochenende) hinausfahren, um einen kleinen, rosa-roten Meeresbewohner zu fangen, der hier 'Granat' genannt wird.",
@@ -463,7 +453,7 @@ const STATIONEN = [
     points: 100
   },
   {
-    nr: 5,
+    nr: 6,
     title: "Tide-Mathematik",
     location: "Hafen / Schleuse",
     hint: "Bleibt am Hafen, aber blickt aufs Wasser. Bis 1991 war Greetsiel ein Tide-Hafen — bei Ebbe lagen die Kutter im Schlick. Erst durch ein gigantisches Bauprojekt mit Schleuse und einer ins Watt reichenden Landzunge wurde der Hafen ganzjährig nutzbar.",
@@ -475,7 +465,7 @@ const STATIONEN = [
     points: 150
   },
   {
-    nr: 6,
+    nr: 7,
     title: "Das Hohe Haus",
     location: "Hohes Haus / Giebelhäuser am Hafen",
     hint: "Schlendert die Hafenstraße entlang. Eines der markantesten Gebäude wird seit über 150 Jahren als Gasthof genutzt, davor war es Sitz eines Verwalters, der die Steuern und Abgaben für den Landesherrn eintrieb. Sein Beruf gibt dem ehemaligen Bewohner einen Titel — wer war das?",
@@ -487,10 +477,10 @@ const STATIONEN = [
     points: 130
   },
   {
-    nr: 7,
+    nr: 8,
     title: "Wasser nach oben",
     location: "Schöpfwerk Greetsiel",
-    hint: "Verlasst den Trubel des Ortskerns Richtung Deich. Sucht ein technisches Bauwerk, das auf den ersten Blick unspektakulär aussieht, aber überlebenswichtig ist: Ohne dieses Gebäude würde halb Krummhörn unter Wasser stehen, denn das Binnenland liegt unter dem Meeresspiegel. Es wurde 1957 in Betrieb genommen.",
+    hint: "Letzte Station! Verlasst den Trubel des Ortskerns Richtung Deich. Sucht ein technisches Bauwerk, das auf den ersten Blick unspektakulär aussieht, aber überlebenswichtig ist: Ohne dieses Gebäude würde halb Krummhörn unter Wasser stehen, denn das Binnenland liegt unter dem Meeresspiegel. Es wurde 1957 in Betrieb genommen.",
     type: "quiz",
     typeLabel: "Quiz",
     task: "Das Greetsieler Schöpfwerk pumpt Wasser aus dem tiefliegenden Binnenland in die Nordsee. <strong>Wie viel Wasser kann jede der drei Pumpen pro Sekunde fördern?</strong>",
@@ -501,74 +491,41 @@ const STATIONEN = [
       "25 m³"
     ],
     correct: 1,
-    reveal: "Richtig! Jede der drei 200-kW-Pumpen schafft <strong>4,5 m³ pro Sekunde</strong>. Zusammen also über 13 m³/s — etwa 50 Badewannen pro Sekunde. Solche Schöpfwerke sind in Ostfriesland überlebenswichtig, da große Teile der Krummhörn unter dem Meeresspiegel liegen. Bei Sturmfluten wird das Wasser sonst nicht mehr abfließen können.",
+    reveal: "Richtig! Jede der drei 200-kW-Pumpen schafft <strong>4,5 m³ pro Sekunde</strong>. Zusammen also über 13 m³/s — etwa 50 Badewannen pro Sekunde. Solche Schöpfwerke sind in Ostfriesland überlebenswichtig, da große Teile der Krummhörn unter dem Meeresspiegel liegen. Bei Sturmfluten wäre ohne sie kein dauerhaftes Wirtschaften möglich.",
     points: 100
-  },
-  {
-    nr: 8,
-    title: "Der Weg zum Meer",
-    location: "Pilsumer Leuchtturm (oder Foto vom Deich)",
-    hint: "Letzte Station! Verlasst den Hafen und blickt nach Westen über den Deich. Etwa 4 km Luftlinie entfernt steht ein gelb-rot geringeltes Wahrzeichen, das durch einen berühmten ostfriesischen Komiker zu landesweiter Bekanntheit kam. Falls ihr ihn nicht erreicht: ein Foto in seine Richtung reicht.",
-    type: "photo",
-    typeLabel: "Foto-Aufgabe",
-    task: "Macht ein Foto, auf dem entweder der <strong>Pilsumer Leuchtturm</strong> zu sehen ist oder der Deich/das Wattenmeer in seine Richtung. <em>Bonus: Wer kennt den Komiker, in dessen Film-Wohnzimmer der Leuchtturm steht?</em>",
-    reveal: "Geschafft! Der <strong>Pilsumer Leuchtturm</strong> ist 'Otto Waalkes' Wohnzimmer' aus dem Film 'Otto – Der Außerfriesische' (1989). Er wurde 1891 in Betrieb genommen, 1915 außer Dienst gestellt und ist heute nur noch ein Wahrzeichen — der weitaus höhere Campener Leuchtturm (63,30 m, höchster Deutschlands) übernahm seine Funktion.",
-    points: 90
   }
 ];
 
-const ABSCHLUSS_QUOTE = "Greetsiel ist mehr als nur ein Postkartenmotiv: 650 Jahre Geschichte, geprägt von Häuptlingsfamilien, dem Kampf gegen das Meer, einer eigenständigen reformierten Tradition und einer lebendigen Fischereiwirtschaft. Wer hier genauer hinsieht, entdeckt ein Mikrokosmos ostfriesischer Identität.";
+const ABSCHLUSS_QUOTE = "Greetsiel ist mehr als nur ein Postkartenmotiv: 650 Jahre Geschichte, geprägt von Häuptlingsfamilien, dem Kampf gegen das Meer, einer eigenständigen reformierten Tradition und einer lebendigen Fischereiwirtschaft. Wer hier genauer hinsieht, entdeckt einen Mikrokosmos ostfriesischer Identität.";
 
-// =============================================================
-// STATE & PERSISTENCE
-// =============================================================
 let state = {
-  name: "",
-  groupName: "",
-  currentStation: 0,
-  totalPoints: 0,
-  answers: [],
-  startTime: null,
-  finished: false
+  name: "", groupName: "", currentStation: 0,
+  totalPoints: 0, answers: [], startTime: null, finished: false
 };
 
 function saveState() {
-  try {
-    localStorage.setItem('greetsiel-rallye', JSON.stringify(state));
-  } catch(e) {}
+  try { localStorage.setItem('greetsiel-rallye', JSON.stringify(state)); } catch(e) {}
 }
-
 function loadState() {
   try {
     const saved = localStorage.getItem('greetsiel-rallye');
     if (saved) state = JSON.parse(saved);
   } catch(e) {}
 }
-
 function resetState() {
   if (confirm("Wirklich neu starten? Alle Fortschritte gehen verloren.")) {
     localStorage.removeItem('greetsiel-rallye');
-    state = {
-      name: "", groupName: "", currentStation: 0,
-      totalPoints: 0, answers: [], startTime: null, finished: false
-    };
+    state = { name: "", groupName: "", currentStation: 0, totalPoints: 0, answers: [], startTime: null, finished: false };
     render();
   }
 }
 
-// =============================================================
-// RENDER
-// =============================================================
 const app = document.getElementById('app');
 
 function render() {
-  if (!state.startTime || !state.name) {
-    renderStart();
-  } else if (state.finished || state.currentStation >= STATIONEN.length) {
-    renderFinal();
-  } else {
-    renderStation();
-  }
+  if (!state.startTime || !state.name) renderStart();
+  else if (state.finished || state.currentStation >= STATIONEN.length) renderFinal();
+  else renderStation();
 }
 
 function renderStart() {
@@ -581,7 +538,7 @@ function renderStart() {
       <div class="start-card">
         <h3>Wie es funktioniert</h3>
         <ul>
-          <li><strong>8 Stationen</strong> führen euch durch Greetsiel</li>
+          <li><strong>8 Stationen</strong> führen euch durch Greetsiel und Umgebung</li>
           <li>Jeder Hinweis verrät euch den nächsten Ort — findet ihn selbst</li>
           <li>An jeder Station löst ihr eine <strong>Aufgabe</strong> (Quiz, Rätsel oder Foto)</li>
           <li>Erst nach richtiger Antwort gibt es den nächsten Hinweis</li>
@@ -595,7 +552,7 @@ function renderStart() {
           <li>Bewegt euch in der Gruppe und respektiert den Verkehr</li>
           <li>Stört keine Anwohner und betretet keine Privatgrundstücke</li>
           <li>Bei Fragen: Lehrkraft kontaktieren</li>
-          <li>Geplante Dauer: <strong>60–90 Minuten</strong></li>
+          <li>Geplante Dauer: <strong>90–120 Minuten</strong></li>
         </ul>
       </div>
 
@@ -673,9 +630,7 @@ function renderStation() {
       <h2 class="station-title">${s.title}</h2>
       <div class="task-text">${s.task}</div>
       <div id="feedback-area"></div>
-      <div id="task-area">
-        ${aufgabeHtml}
-      </div>
+      <div id="task-area">${aufgabeHtml}</div>
     </div>
 
     <div class="skip-link" onclick="resetState()">Rallye neu starten</div>
@@ -760,11 +715,7 @@ function submitPhoto() {
 
 function onCorrect(s) {
   state.totalPoints += s.points;
-  state.answers.push({
-    station: s.nr,
-    title: s.title,
-    points: s.points
-  });
+  state.answers.push({ station: s.nr, title: s.title, points: s.points });
 
   document.getElementById('task-area').innerHTML = `
     <div class="reveal-card">
@@ -784,9 +735,7 @@ function onCorrect(s) {
 
 function nextStation() {
   state.currentStation++;
-  if (state.currentStation >= STATIONEN.length) {
-    state.finished = true;
-  }
+  if (state.currentStation >= STATIONEN.length) state.finished = true;
   saveState();
   render();
   window.scrollTo(0, 0);
@@ -823,24 +772,13 @@ function renderFinal() {
         <div class="final-points">${state.totalPoints}</div>
         <div class="final-points-label">von ${maxPunkte} Punkten</div>
         <div class="final-stats">
-          <div>
-            <span class="final-stat-num">${STATIONEN.length}</span>
-            Stationen
-          </div>
-          <div>
-            <span class="final-stat-num">${dauer}</span>
-            Minuten
-          </div>
-          <div>
-            <span class="final-stat-num">${prozent}%</span>
-            erreicht
-          </div>
+          <div><span class="final-stat-num">${STATIONEN.length}</span>Stationen</div>
+          <div><span class="final-stat-num">${dauer}</span>Minuten</div>
+          <div><span class="final-stat-num">${prozent}%</span>erreicht</div>
         </div>
       </div>
 
-      <div class="final-quote">
-        "${ABSCHLUSS_QUOTE}"
-      </div>
+      <div class="final-quote">"${ABSCHLUSS_QUOTE}"</div>
 
       <button class="btn-primary" onclick="shareResult()">Ergebnis teilen</button>
       <button class="btn-secondary" onclick="resetState()">Neue Rallye starten</button>
@@ -869,9 +807,6 @@ function shareResult() {
   }
 }
 
-// =============================================================
-// INIT
-// =============================================================
 loadState();
 render();
 </script>
