@@ -1,1 +1,880 @@
+<!DOCTYPE html>
 
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Greetsiel-Rallye">
+<meta name="theme-color" content="#1a4d6e">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgcng9IjQwIiBmaWxsPSIjMWE0ZDZlIi8+PHRleHQgeD0iOTAiIHk9IjExNSIgZm9udC1zaXplPSI3MCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+ms8L3RleHQ+PC9zdmc+">
+<title>Greetsiel-Rallye</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+    background: linear-gradient(170deg, #0f3a55 0%, #1a4d6e 50%, #2a6d8e 100%);
+    background-attachment: fixed;
+    color: #fff;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .app {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 16px 14px 40px;
+  }
+
+/* === START SCREEN === */
+.start-screen {
+text-align: center;
+padding: 30px 16px;
+}
+.start-emoji { font-size: 56px; margin-bottom: 10px; }
+.start-title {
+font-size: 28px;
+font-weight: 800;
+letter-spacing: -0.5px;
+margin: 0 0 8px;
+}
+.start-subtitle {
+font-size: 15px;
+color: #ffd166;
+font-weight: 500;
+margin-bottom: 24px;
+}
+.start-card {
+background: rgba(255,255,255,0.08);
+border: 1px solid rgba(255,255,255,0.12);
+border-radius: 18px;
+padding: 20px;
+margin-bottom: 16px;
+text-align: left;
+line-height: 1.55;
+font-size: 14px;
+}
+.start-card h3 {
+margin: 0 0 10px;
+font-size: 16px;
+color: #ffd166;
+}
+.start-card ul {
+margin: 0;
+padding-left: 18px;
+}
+.start-card li { margin-bottom: 6px; }
+.name-input {
+width: 100%;
+background: rgba(0,0,0,0.25);
+border: 1px solid rgba(255,255,255,0.2);
+color: #fff;
+font-size: 17px;
+padding: 14px;
+border-radius: 12px;
+font-family: inherit;
+-webkit-appearance: none;
+margin-bottom: 14px;
+}
+.name-input::placeholder { color: rgba(255,255,255,0.4); }
+.btn-primary {
+width: 100%;
+background: linear-gradient(135deg, #ffd166 0%, #ffb83d 100%);
+color: #0f3a55;
+border: none;
+padding: 16px;
+border-radius: 14px;
+font-size: 17px;
+font-weight: 700;
+cursor: pointer;
+box-shadow: 0 4px 16px rgba(255, 209, 102, 0.3);
+font-family: inherit;
+}
+.btn-primary:active { transform: scale(0.98); }
+.btn-secondary {
+width: 100%;
+background: rgba(255,255,255,0.08);
+color: #fff;
+border: 1px solid rgba(255,255,255,0.2);
+padding: 14px;
+border-radius: 14px;
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+margin-top: 10px;
+font-family: inherit;
+}
+
+/* === STATION SCREEN === */
+.topbar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 8px 4px 16px;
+font-size: 13px;
+font-weight: 600;
+}
+.progress {
+color: rgba(255,255,255,0.65);
+}
+.points {
+background: #ffd166;
+color: #0f3a55;
+padding: 4px 12px;
+border-radius: 20px;
+font-weight: 800;
+}
+.progress-bar {
+height: 4px;
+background: rgba(255,255,255,0.1);
+border-radius: 2px;
+overflow: hidden;
+margin-bottom: 18px;
+}
+.progress-fill {
+height: 100%;
+background: linear-gradient(90deg, #ffd166, #ffb83d);
+transition: width 0.5s ease;
+}
+
+.hint-card {
+background: rgba(255, 209, 102, 0.12);
+border: 1px solid rgba(255, 209, 102, 0.3);
+border-radius: 16px;
+padding: 18px;
+margin-bottom: 16px;
+}
+.hint-label {
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 1px;
+color: #ffd166;
+font-weight: 700;
+margin-bottom: 8px;
+}
+.hint-text {
+font-size: 16px;
+line-height: 1.55;
+font-style: italic;
+}
+
+.question-card {
+background: rgba(255,255,255,0.08);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border: 1px solid rgba(255,255,255,0.12);
+border-radius: 18px;
+padding: 20px;
+margin-bottom: 16px;
+}
+.station-title {
+font-size: 21px;
+font-weight: 800;
+letter-spacing: -0.3px;
+margin: 0 0 6px;
+}
+.task-type {
+display: inline-block;
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 0.8px;
+background: rgba(255, 209, 102, 0.2);
+color: #ffd166;
+padding: 3px 10px;
+border-radius: 6px;
+font-weight: 700;
+margin-bottom: 14px;
+}
+.task-text {
+font-size: 15px;
+line-height: 1.6;
+color: rgba(255,255,255,0.92);
+margin-bottom: 16px;
+}
+.task-text strong { color: #ffd166; }
+
+.answer-input {
+width: 100%;
+background: rgba(0,0,0,0.3);
+border: 1px solid rgba(255,255,255,0.2);
+color: #fff;
+font-size: 17px;
+padding: 14px;
+border-radius: 12px;
+font-family: inherit;
+-webkit-appearance: none;
+}
+.answer-input:focus {
+outline: none;
+border-color: #ffd166;
+}
+.answer-input::placeholder { color: rgba(255,255,255,0.35); }
+
+.multi-choice {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+.choice-btn {
+text-align: left;
+background: rgba(0,0,0,0.25);
+border: 1px solid rgba(255,255,255,0.15);
+color: #fff;
+padding: 13px 14px;
+border-radius: 12px;
+font-size: 15px;
+font-family: inherit;
+cursor: pointer;
+transition: all 0.15s;
+}
+.choice-btn:active { transform: scale(0.98); }
+.choice-btn.selected {
+border-color: #ffd166;
+background: rgba(255, 209, 102, 0.15);
+}
+
+.photo-upload {
+border: 2px dashed rgba(255,255,255,0.25);
+border-radius: 14px;
+padding: 24px;
+text-align: center;
+cursor: pointer;
+transition: all 0.2s;
+background: rgba(0,0,0,0.15);
+}
+.photo-upload:hover, .photo-upload.has-photo {
+border-color: #ffd166;
+background: rgba(255, 209, 102, 0.08);
+}
+.photo-upload input { display: none; }
+.photo-icon { font-size: 36px; margin-bottom: 8px; }
+.photo-text { font-size: 14px; color: rgba(255,255,255,0.7); }
+.photo-preview {
+margin-top: 12px;
+border-radius: 10px;
+max-width: 100%;
+max-height: 200px;
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
+
+.feedback {
+border-radius: 14px;
+padding: 14px 16px;
+margin-bottom: 16px;
+font-size: 14px;
+font-weight: 500;
+line-height: 1.5;
+animation: slideIn 0.3s ease;
+}
+@keyframes slideIn {
+from { opacity: 0; transform: translateY(-6px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.feedback.correct {
+background: rgba(72, 187, 120, 0.15);
+border: 1px solid rgba(72, 187, 120, 0.4);
+color: #9ae6b4;
+}
+.feedback.wrong {
+background: rgba(229, 62, 62, 0.12);
+border: 1px solid rgba(229, 62, 62, 0.35);
+color: #feb2b2;
+}
+
+.reveal-card {
+background: linear-gradient(135deg, rgba(72, 187, 120, 0.2), rgba(72, 187, 120, 0.08));
+border: 1px solid rgba(72, 187, 120, 0.4);
+border-radius: 16px;
+padding: 18px;
+margin-bottom: 16px;
+}
+.reveal-label {
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 1px;
+color: #9ae6b4;
+font-weight: 700;
+margin-bottom: 8px;
+}
+.reveal-text {
+font-size: 15px;
+line-height: 1.55;
+}
+
+/* === FINAL SCREEN === */
+.final-screen {
+text-align: center;
+padding: 30px 16px;
+}
+.final-emoji { font-size: 72px; margin-bottom: 12px; }
+.final-title {
+font-size: 30px;
+font-weight: 800;
+margin: 0 0 8px;
+color: #ffd166;
+}
+.final-name {
+font-size: 18px;
+margin-bottom: 24px;
+color: rgba(255,255,255,0.85);
+}
+.final-score-card {
+background: linear-gradient(135deg, #ffd166 0%, #ffb83d 100%);
+color: #0f3a55;
+border-radius: 20px;
+padding: 28px;
+margin-bottom: 20px;
+box-shadow: 0 8px 28px rgba(255, 209, 102, 0.3);
+}
+.final-points {
+font-size: 72px;
+font-weight: 900;
+line-height: 1;
+letter-spacing: -3px;
+font-variant-numeric: tabular-nums;
+}
+.final-points-label {
+font-size: 14px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 1px;
+opacity: 0.7;
+margin-top: 6px;
+}
+.final-stats {
+display: flex;
+justify-content: space-around;
+margin-top: 16px;
+padding-top: 16px;
+border-top: 1px solid rgba(15, 58, 85, 0.2);
+font-size: 13px;
+font-weight: 600;
+}
+.final-stat-num {
+font-size: 22px;
+font-weight: 800;
+display: block;
+}
+.final-quote {
+background: rgba(255,255,255,0.06);
+border-left: 3px solid #ffd166;
+padding: 14px 18px;
+border-radius: 8px;
+text-align: left;
+font-style: italic;
+font-size: 14px;
+line-height: 1.55;
+margin-bottom: 20px;
+}
+
+.footer-note {
+text-align: center;
+font-size: 11px;
+color: rgba(255,255,255,0.4);
+margin-top: 24px;
+line-height: 1.5;
+}
+
+.skip-link {
+display: block;
+text-align: center;
+color: rgba(255,255,255,0.4);
+font-size: 12px;
+margin-top: 14px;
+text-decoration: underline;
+cursor: pointer;
+}
+</style>
+
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script>
+// =============================================================
+// STATIONEN — Schnitzeljagd Greetsiel
+// Reihenfolge: Hinweis führt zum nächsten Ort, dort wird Aufgabe gelöst
+// =============================================================
+const STATIONEN = [
+  {
+    nr: 1,
+    title: "Tor zur Geschichte",
+    location: "Zwillingsmühlen",
+    hint: "Folgt dem Weg vom Parkplatz Richtung Ortskern. Bevor ihr den Hafen erreicht, begrüßen euch zwei farbenfrohe Wächter — ungleiche Geschwister, die seit Jahrhunderten den Wind ernten. Die ältere wurde 1706 errichtet, ihre Schwester ist gut 150 Jahre jünger. Findet sie und löst die Aufgabe in ihrer Nähe.",
+    type: "quiz",
+    typeLabel: "Quiz",
+    task: "Die Greetsieler Zwillingsmühlen sind das Wahrzeichen des Ortes. Beide Mühlen haben unterschiedliche Funktionen und eine bewegte Geschichte. <strong>Welcher Mühlentyp sind die Zwillingsmühlen?</strong>",
+    choices: [
+      "Bockwindmühle",
+      "Galerieholländer",
+      "Turmwindmühle",
+      "Paltrockmühle"
+    ],
+    correct: 1,
+    reveal: "Richtig! Es sind <strong>Galerieholländer</strong> — eine Mühlenart, bei der nur die obere Kappe samt Flügeln gedreht werden kann. Die Galerie auf halber Höhe diente dem Müller, um die Flügel in den Wind zu stellen. Die rote Mühle stammt von 1706 (Wiederaufbau 1921), die grüne von 1856.",
+    points: 100
+  },
+  {
+    nr: 2,
+    title: "Das stille Fundament",
+    location: "Steinhaus",
+    hint: "Verlasst die Mühlen und geht in Richtung des historischen Ortskerns. Sucht ein backsteinernes Gebäude, das wie ein Zeitzeuge wirkt — errichtet um 1600 auf den Fundamenten eines Vorgängerbaus aus dem späten 14. Jahrhundert. Es gehörte einst einer berühmten ostfriesischen Häuptlingsfamilie, die später Grafen und Fürsten stellte.",
+    type: "code",
+    typeLabel: "Rätsel",
+    task: "Die Familie, die hier residierte, prägte Ostfriesland über Jahrhunderte. Ihr Name lautet rückwärts gelesen <strong>ANESKRIC</strong>. Vor dem Steinhaus findet ihr Hinweise auf das Gründungsjahr des Vorgängerbaus. <strong>In welchem Jahr wurde der Vorgängerbau des Steinhauses errichtet?</strong> (vierstellige Zahl)",
+    answer: "1390",
+    reveal: "Richtig! <strong>1390</strong> — die Cirksena waren ostfriesische Häuptlinge, die 1464 zur Reichsgrafenwürde erhoben wurden und bis 1744 die Grafschaft (später Fürstentum) Ostfriesland regierten. Das Steinhaus ist eines der ältesten Gebäude Greetsiels.",
+    points: 150
+  },
+  {
+    nr: 3,
+    title: "Wo der Geist wohnt",
+    location: "Evangelisch-reformierte Kirche",
+    hint: "Kein Dorf ohne Gotteshaus. Sucht das schlichte Backsteingebäude im Ortskern — es ist evangelisch-reformiert geprägt, wie es im calvinistischen Ostfriesland Tradition hat. Auf dem Dachreiter findet ihr einen Hinweis auf das Alter der Glocke, die angeblich zu den ältesten Niedersachsens zählt.",
+    type: "photo",
+    typeLabel: "Foto-Aufgabe",
+    task: "Macht ein <strong>Gruppenfoto</strong> vor dem Eingang der Kirche, auf dem alle Mitglieder eurer Gruppe zu sehen sind. Achtet darauf, dass das Kirchenportal im Hintergrund klar erkennbar ist. <em>Hinweis: Das Foto wird nur lokal auf eurem Gerät gespeichert.</em>",
+    reveal: "Sehr gut! Die evangelisch-reformierte Kirche Greetsiel wurde im 14. Jahrhundert errichtet. Reformiert bedeutet, dass die Gemeinde der calvinistischen Tradition folgt — typisch für Ostfriesland, das eine starke niederländisch geprägte reformierte Tradition hat (im Gegensatz zum überwiegend lutherischen Restdeutschland).",
+    points: 80
+  },
+  {
+    nr: 4,
+    title: "Die rote Flotte",
+    location: "Fischereihafen",
+    hint: "Folgt eurer Nase! Der Geruch von Salzwasser, Fisch und Diesel führt euch zum wirtschaftlichen Herzstück des Ortes. Hier liegen die bunten Boote, die täglich (außer am Wochenende) hinausfahren, um einen kleinen, rosa-roten Meeresbewohner zu fangen, der hier 'Granat' genannt wird.",
+    type: "quiz",
+    typeLabel: "Quiz",
+    task: "Greetsiel beheimatet die größte Krabbenkutterflotte Ostfrieslands und die zweitgrößte Deutschlands. <strong>Wie viele Krabbenkutter sind aktuell ungefähr im Greetsieler Hafen registriert?</strong>",
+    choices: [
+      "ca. 10",
+      "ca. 25",
+      "ca. 50",
+      "ca. 100"
+    ],
+    correct: 1,
+    reveal: "Richtig! Es sind <strong>ca. 25 Krabbenkutter</strong>. Nur Büsum hat in Deutschland eine größere Flotte. Die Greetsieler Kutter fangen vor allem Nordseegarnelen ('Granat'), aber auch Schollen und Seezungen. Tradition und Tourismus gehen hier Hand in Hand: Die bunten Kutter sind das meistfotografierte Motiv des Dorfes.",
+    points: 100
+  },
+  {
+    nr: 5,
+    title: "Tide-Mathematik",
+    location: "Hafen / Schleuse",
+    hint: "Bleibt am Hafen, aber blickt aufs Wasser. Bis 1991 war Greetsiel ein Tide-Hafen — bei Ebbe lagen die Kutter im Schlick. Erst durch ein gigantisches Bauprojekt mit Schleuse und einer ins Watt reichenden Landzunge wurde der Hafen ganzjährig nutzbar.",
+    type: "code",
+    typeLabel: "Rätsel",
+    task: "Die Landzunge, die Greetsiel tideunabhängig macht, heißt <strong>Leyhörn</strong> (auch Leybuchthörn). Ihr Bau wurde 1991 abgeschlossen. <br><br>Berechnet: Wie viele Jahre liegt der Bau heute zurück, wenn wir das Jahr 2026 nehmen? Multipliziert das Ergebnis mit der Anzahl der Buchstaben im Wort 'GREETSIEL'. <strong>Wie lautet das Endergebnis?</strong>",
+    answer: "315",
+    reveal: "Richtig! 35 Jahre × 9 Buchstaben = <strong>315</strong>. Die Leyhörn ist ein interessantes Beispiel für Küstenschutz: Sie kombiniert Naturschutz (Vogelschutzgebiet) mit Wirtschaftsinteressen (tideunabhängiger Hafen) — ein typisch ostfriesischer Pragmatismus.",
+    points: 150
+  },
+  {
+    nr: 6,
+    title: "Das Hohe Haus",
+    location: "Hohes Haus / Giebelhäuser am Hafen",
+    hint: "Schlendert die Hafenstraße entlang. Eines der markantesten Gebäude wird seit über 150 Jahren als Gasthof genutzt, davor war es Sitz eines Verwalters, der die Steuern und Abgaben für den Landesherrn eintrieb. Sein Beruf gibt dem ehemaligen Bewohner einen Titel — wer war das?",
+    type: "code",
+    typeLabel: "Rätsel",
+    task: "Der ursprüngliche Bewohner des 'Hohen Hauses' verwaltete fürstliche Einkünfte und trieb Pachtzinsen ein. <strong>Wie lautet die historische Berufsbezeichnung dieses Verwalters?</strong> (ein Wort, endet auf '-meister')",
+    answer: "rentmeister",
+    reveal: "Richtig! Ein <strong>Rentmeister</strong> war im Mittelalter und der frühen Neuzeit ein fürstlicher Verwaltungsbeamter, der Pachten, Zinsen ('Renten') und Naturalabgaben eintrieb. In Greetsiel gehörten diese Einkünfte zur Grafschaft Ostfriesland. Heute beherbergt das Hohe Haus ein traditionsreiches Restaurant.",
+    points: 130
+  },
+  {
+    nr: 7,
+    title: "Wasser nach oben",
+    location: "Schöpfwerk Greetsiel",
+    hint: "Verlasst den Trubel des Ortskerns Richtung Deich. Sucht ein technisches Bauwerk, das auf den ersten Blick unspektakulär aussieht, aber überlebenswichtig ist: Ohne dieses Gebäude würde halb Krummhörn unter Wasser stehen, denn das Binnenland liegt unter dem Meeresspiegel. Es wurde 1957 in Betrieb genommen.",
+    type: "quiz",
+    typeLabel: "Quiz",
+    task: "Das Greetsieler Schöpfwerk pumpt Wasser aus dem tiefliegenden Binnenland in die Nordsee. <strong>Wie viel Wasser kann jede der drei Pumpen pro Sekunde fördern?</strong>",
+    choices: [
+      "0,5 m³",
+      "4,5 m³",
+      "12 m³",
+      "25 m³"
+    ],
+    correct: 1,
+    reveal: "Richtig! Jede der drei 200-kW-Pumpen schafft <strong>4,5 m³ pro Sekunde</strong>. Zusammen also über 13 m³/s — etwa 50 Badewannen pro Sekunde. Solche Schöpfwerke sind in Ostfriesland überlebenswichtig, da große Teile der Krummhörn unter dem Meeresspiegel liegen. Bei Sturmfluten wird das Wasser sonst nicht mehr abfließen können.",
+    points: 100
+  },
+  {
+    nr: 8,
+    title: "Der Weg zum Meer",
+    location: "Pilsumer Leuchtturm (oder Foto vom Deich)",
+    hint: "Letzte Station! Verlasst den Hafen und blickt nach Westen über den Deich. Etwa 4 km Luftlinie entfernt steht ein gelb-rot geringeltes Wahrzeichen, das durch einen berühmten ostfriesischen Komiker zu landesweiter Bekanntheit kam. Falls ihr ihn nicht erreicht: ein Foto in seine Richtung reicht.",
+    type: "photo",
+    typeLabel: "Foto-Aufgabe",
+    task: "Macht ein Foto, auf dem entweder der <strong>Pilsumer Leuchtturm</strong> zu sehen ist oder der Deich/das Wattenmeer in seine Richtung. <em>Bonus: Wer kennt den Komiker, in dessen Film-Wohnzimmer der Leuchtturm steht?</em>",
+    reveal: "Geschafft! Der <strong>Pilsumer Leuchtturm</strong> ist 'Otto Waalkes' Wohnzimmer' aus dem Film 'Otto – Der Außerfriesische' (1989). Er wurde 1891 in Betrieb genommen, 1915 außer Dienst gestellt und ist heute nur noch ein Wahrzeichen — der weitaus höhere Campener Leuchtturm (63,30 m, höchster Deutschlands) übernahm seine Funktion.",
+    points: 90
+  }
+];
+
+const ABSCHLUSS_QUOTE = "Greetsiel ist mehr als nur ein Postkartenmotiv: 650 Jahre Geschichte, geprägt von Häuptlingsfamilien, dem Kampf gegen das Meer, einer eigenständigen reformierten Tradition und einer lebendigen Fischereiwirtschaft. Wer hier genauer hinsieht, entdeckt ein Mikrokosmos ostfriesischer Identität.";
+
+// =============================================================
+// STATE & PERSISTENCE
+// =============================================================
+let state = {
+  name: "",
+  groupName: "",
+  currentStation: 0,
+  totalPoints: 0,
+  answers: [],
+  startTime: null,
+  finished: false
+};
+
+function saveState() {
+  try {
+    localStorage.setItem('greetsiel-rallye', JSON.stringify(state));
+  } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('greetsiel-rallye');
+    if (saved) state = JSON.parse(saved);
+  } catch(e) {}
+}
+
+function resetState() {
+  if (confirm("Wirklich neu starten? Alle Fortschritte gehen verloren.")) {
+    localStorage.removeItem('greetsiel-rallye');
+    state = {
+      name: "", groupName: "", currentStation: 0,
+      totalPoints: 0, answers: [], startTime: null, finished: false
+    };
+    render();
+  }
+}
+
+// =============================================================
+// RENDER
+// =============================================================
+const app = document.getElementById('app');
+
+function render() {
+  if (!state.startTime || !state.name) {
+    renderStart();
+  } else if (state.finished || state.currentStation >= STATIONEN.length) {
+    renderFinal();
+  } else {
+    renderStation();
+  }
+}
+
+function renderStart() {
+  app.innerHTML = `
+    <div class="start-screen">
+      <div class="start-emoji">🦐</div>
+      <h1 class="start-title">Greetsiel-Rallye</h1>
+      <div class="start-subtitle">Schnitzeljagd durch das Fischerdorf</div>
+
+      <div class="start-card">
+        <h3>Wie es funktioniert</h3>
+        <ul>
+          <li><strong>8 Stationen</strong> führen euch durch Greetsiel</li>
+          <li>Jeder Hinweis verrät euch den nächsten Ort — findet ihn selbst</li>
+          <li>An jeder Station löst ihr eine <strong>Aufgabe</strong> (Quiz, Rätsel oder Foto)</li>
+          <li>Erst nach richtiger Antwort gibt es den nächsten Hinweis</li>
+          <li>Sammelt Punkte — wer am Ende die meisten hat, gewinnt!</li>
+        </ul>
+      </div>
+
+      <div class="start-card">
+        <h3>Spielregeln</h3>
+        <ul>
+          <li>Bewegt euch in der Gruppe und respektiert den Verkehr</li>
+          <li>Stört keine Anwohner und betretet keine Privatgrundstücke</li>
+          <li>Bei Fragen: Lehrkraft kontaktieren</li>
+          <li>Geplante Dauer: <strong>60–90 Minuten</strong></li>
+        </ul>
+      </div>
+
+      <input type="text" class="name-input" id="player-name" placeholder="Eure Namen (z. B. 'Anna, Ben, Lea')" maxlength="50">
+      <input type="text" class="name-input" id="group-name" placeholder="Gruppenname (optional)" maxlength="30">
+
+      <button class="btn-primary" onclick="startRallye()">Rallye starten</button>
+    </div>
+  `;
+}
+
+function startRallye() {
+  const nameInput = document.getElementById('player-name');
+  const groupInput = document.getElementById('group-name');
+  const name = nameInput.value.trim();
+  if (!name) {
+    nameInput.style.borderColor = '#feb2b2';
+    nameInput.focus();
+    return;
+  }
+  state.name = name;
+  state.groupName = groupInput.value.trim();
+  state.startTime = Date.now();
+  state.currentStation = 0;
+  saveState();
+  render();
+}
+
+function renderStation() {
+  const s = STATIONEN[state.currentStation];
+  const progress = ((state.currentStation) / STATIONEN.length) * 100;
+
+  let aufgabeHtml = '';
+  if (s.type === 'quiz') {
+    aufgabeHtml = `
+      <div class="multi-choice" id="choices">
+        ${s.choices.map((c, i) => `
+          <button class="choice-btn" onclick="selectChoice(${i})" data-idx="${i}">${c}</button>
+        `).join('')}
+      </div>
+      <button class="btn-primary" style="margin-top:14px" onclick="checkQuiz()">Antwort prüfen</button>
+    `;
+  } else if (s.type === 'code') {
+    aufgabeHtml = `
+      <input type="text" class="answer-input" id="code-answer" placeholder="Eure Antwort..." autocapitalize="off" autocomplete="off">
+      <button class="btn-primary" style="margin-top:12px" onclick="checkCode()">Antwort prüfen</button>
+    `;
+  } else if (s.type === 'photo') {
+    aufgabeHtml = `
+      <label class="photo-upload" id="photo-label">
+        <input type="file" accept="image/*" capture="environment" id="photo-input" onchange="handlePhoto(event)">
+        <div class="photo-icon">📸</div>
+        <div class="photo-text">Tippen zum Foto machen</div>
+      </label>
+      <button class="btn-primary" style="margin-top:14px; opacity:0.5" id="photo-submit" disabled onclick="submitPhoto()">Foto bestätigen</button>
+    `;
+  }
+
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="progress">Station ${state.currentStation + 1} / ${STATIONEN.length}</div>
+      <div class="points">${state.totalPoints} Pkt.</div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width:${progress}%"></div>
+    </div>
+
+    <div class="hint-card">
+      <div class="hint-label">Hinweis · Findet den Ort</div>
+      <div class="hint-text">${s.hint}</div>
+    </div>
+
+    <div class="question-card">
+      <div class="task-type">${s.typeLabel} · ${s.points} Punkte</div>
+      <h2 class="station-title">${s.title}</h2>
+      <div class="task-text">${s.task}</div>
+      <div id="feedback-area"></div>
+      <div id="task-area">
+        ${aufgabeHtml}
+      </div>
+    </div>
+
+    <div class="skip-link" onclick="resetState()">Rallye neu starten</div>
+  `;
+}
+
+let currentChoice = -1;
+let currentPhoto = null;
+
+function selectChoice(idx) {
+  currentChoice = idx;
+  document.querySelectorAll('.choice-btn').forEach((b, i) => {
+    b.classList.toggle('selected', i === idx);
+  });
+}
+
+function checkQuiz() {
+  const s = STATIONEN[state.currentStation];
+  if (currentChoice === -1) {
+    showFeedback("Bitte wähle eine Antwort aus.", false);
+    return;
+  }
+  if (currentChoice === s.correct) {
+    onCorrect(s);
+  } else {
+    state.totalPoints = Math.max(0, state.totalPoints - 10);
+    saveState();
+    showFeedback("Leider falsch. -10 Punkte. Versucht es nochmal!", false);
+    document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+    currentChoice = -1;
+    updatePoints();
+  }
+}
+
+function checkCode() {
+  const s = STATIONEN[state.currentStation];
+  const inp = document.getElementById('code-answer');
+  const val = (inp.value || '').trim().toLowerCase();
+  if (!val) {
+    showFeedback("Bitte gib eine Antwort ein.", false);
+    return;
+  }
+  const correct = String(s.answer).toLowerCase();
+  if (val === correct) {
+    onCorrect(s);
+  } else {
+    state.totalPoints = Math.max(0, state.totalPoints - 10);
+    saveState();
+    showFeedback("Leider falsch. -10 Punkte. Lest den Hinweis nochmal genau!", false);
+    updatePoints();
+  }
+}
+
+function handlePhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    currentPhoto = ev.target.result;
+    const label = document.getElementById('photo-label');
+    label.classList.add('has-photo');
+    label.innerHTML = `
+      <input type="file" accept="image/*" capture="environment" id="photo-input" onchange="handlePhoto(event)">
+      <img src="${currentPhoto}" class="photo-preview">
+      <div class="photo-text" style="margin-top:10px">Foto aufgenommen — tippen zum Ändern</div>
+    `;
+    const btn = document.getElementById('photo-submit');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitPhoto() {
+  const s = STATIONEN[state.currentStation];
+  if (!currentPhoto) {
+    showFeedback("Bitte erst ein Foto aufnehmen.", false);
+    return;
+  }
+  onCorrect(s);
+}
+
+function onCorrect(s) {
+  state.totalPoints += s.points;
+  state.answers.push({
+    station: s.nr,
+    title: s.title,
+    points: s.points
+  });
+
+  document.getElementById('task-area').innerHTML = `
+    <div class="reveal-card">
+      <div class="reveal-label">✓ Richtig! +${s.points} Punkte</div>
+      <div class="reveal-text">${s.reveal}</div>
+    </div>
+    <button class="btn-primary" onclick="nextStation()">
+      ${state.currentStation + 1 >= STATIONEN.length ? 'Rallye abschließen' : 'Weiter zur nächsten Station'}
+    </button>
+  `;
+  document.getElementById('feedback-area').innerHTML = '';
+  currentChoice = -1;
+  currentPhoto = null;
+  saveState();
+  updatePoints();
+}
+
+function nextStation() {
+  state.currentStation++;
+  if (state.currentStation >= STATIONEN.length) {
+    state.finished = true;
+  }
+  saveState();
+  render();
+  window.scrollTo(0, 0);
+}
+
+function showFeedback(msg, ok) {
+  const area = document.getElementById('feedback-area');
+  area.innerHTML = `<div class="feedback ${ok ? 'correct' : 'wrong'}">${msg}</div>`;
+}
+
+function updatePoints() {
+  const pointsEl = document.querySelector('.points');
+  if (pointsEl) pointsEl.textContent = state.totalPoints + ' Pkt.';
+}
+
+function renderFinal() {
+  const dauer = Math.round((Date.now() - state.startTime) / 60000);
+  const maxPunkte = STATIONEN.reduce((sum, s) => sum + s.points, 0);
+  const prozent = Math.round((state.totalPoints / maxPunkte) * 100);
+
+  let bewertung = "";
+  if (prozent >= 90) bewertung = "🏆 Hervorragend!";
+  else if (prozent >= 75) bewertung = "🌟 Sehr gut!";
+  else if (prozent >= 60) bewertung = "👍 Gut gemacht!";
+  else bewertung = "✓ Ziel erreicht!";
+
+  app.innerHTML = `
+    <div class="final-screen">
+      <div class="final-emoji">⚓</div>
+      <h1 class="final-title">${bewertung}</h1>
+      <div class="final-name">${state.name}${state.groupName ? ' · ' + state.groupName : ''}</div>
+
+      <div class="final-score-card">
+        <div class="final-points">${state.totalPoints}</div>
+        <div class="final-points-label">von ${maxPunkte} Punkten</div>
+        <div class="final-stats">
+          <div>
+            <span class="final-stat-num">${STATIONEN.length}</span>
+            Stationen
+          </div>
+          <div>
+            <span class="final-stat-num">${dauer}</span>
+            Minuten
+          </div>
+          <div>
+            <span class="final-stat-num">${prozent}%</span>
+            erreicht
+          </div>
+        </div>
+      </div>
+
+      <div class="final-quote">
+        "${ABSCHLUSS_QUOTE}"
+      </div>
+
+      <button class="btn-primary" onclick="shareResult()">Ergebnis teilen</button>
+      <button class="btn-secondary" onclick="resetState()">Neue Rallye starten</button>
+
+      <div class="footer-note">
+        Zeigt euer Ergebnis eurer Lehrkraft<br>
+        Mariengymnasium Papenburg
+      </div>
+    </div>
+  `;
+}
+
+function shareResult() {
+  const maxPunkte = STATIONEN.reduce((sum, s) => sum + s.points, 0);
+  const text = `🦐 Greetsiel-Rallye geschafft!\n\n${state.name}${state.groupName ? ' (' + state.groupName + ')' : ''}\n${state.totalPoints} von ${maxPunkte} Punkten\n${STATIONEN.length} Stationen erkundet`;
+
+  if (navigator.share) {
+    navigator.share({ title: 'Greetsiel-Rallye Ergebnis', text }).catch(() => {});
+  } else {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      alert("Ergebnis in die Zwischenablage kopiert!");
+    } else {
+      alert(text);
+    }
+  }
+}
+
+// =============================================================
+// INIT
+// =============================================================
+loadState();
+render();
+</script>
+
+</body>
+</html>
