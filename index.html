@@ -31,6 +31,41 @@
     padding: 16px 14px 40px;
   }
 
+.lang-screen { text-align: center; padding: 60px 16px 30px; }
+.lang-emoji { font-size: 64px; margin-bottom: 16px; }
+.lang-title {
+font-size: 26px; font-weight: 800;
+margin: 0 0 8px;
+letter-spacing: -0.4px;
+}
+.lang-subtitle {
+font-size: 14px;
+color: rgba(255,255,255,0.6);
+margin-bottom: 32px;
+}
+.lang-btn {
+display: flex;
+align-items: center;
+justify-content: space-between;
+width: 100%;
+background: rgba(255,255,255,0.08);
+border: 1px solid rgba(255,255,255,0.15);
+color: #fff;
+padding: 18px 20px;
+border-radius: 16px;
+font-size: 17px;
+font-weight: 600;
+cursor: pointer;
+margin-bottom: 12px;
+font-family: inherit;
+transition: all 0.15s;
+}
+.lang-btn:active { transform: scale(0.98); }
+.lang-btn:hover { border-color: #ffd166; }
+.lang-flag { font-size: 28px; margin-right: 14px; }
+.lang-name { flex: 1; text-align: left; }
+.lang-arrow { color: #ffd166; font-size: 20px; }
+
 .start-screen { text-align: center; padding: 30px 16px; }
 .start-emoji { font-size: 56px; margin-bottom: 10px; }
 .start-title {
@@ -97,6 +132,15 @@ font-weight: 600;
 cursor: pointer;
 margin-top: 10px;
 font-family: inherit;
+}
+.lang-switch-link {
+display: block;
+text-align: center;
+color: rgba(255,255,255,0.5);
+font-size: 12px;
+margin-top: 16px;
+text-decoration: underline;
+cursor: pointer;
 }
 
 .topbar {
@@ -380,125 +424,441 @@ cursor: pointer;
 <div class="app" id="app"></div>
 
 <script>
-const STATIONEN = [
-  {
-    nr: 1,
-    title: "Otto's Wohnzimmer",
-    location: "Pilsumer Leuchtturm",
-    hint: "Eure Reise beginnt nicht in Greetsiel selbst, sondern in der weiten Marschlandschaft davor. Folgt der Straße Richtung Pilsum und sucht ein knallig gelb-rot geringeltes Wahrzeichen mitten auf der Wiese. Es wurde durch einen ostfriesischen Komiker zur Legende — sein Film aus dem Jahr 1989 machte den Turm zum 'Wohnzimmer'.",
-    type: "code",
-    typeLabel: "Rätsel",
-    task: "Der Pilsumer Leuchtturm wurde 1891 errichtet, aber bereits nach wenigen Jahrzehnten außer Dienst gestellt — er war zu niedrig. Otto Waalkes machte ihn mit seinem Film bekannt. <br><br><strong>In welchem Jahr wurde der Leuchtturm außer Betrieb genommen?</strong> (vierstellige Zahl)",
-    answer: "1915",
-    reveal: "Richtig! <strong>1915</strong> wurde der Pilsumer Leuchtturm außer Dienst gestellt — nach nur 24 Jahren Betrieb. Seine Aufgabe übernahm der weitaus höhere <strong>Campener Leuchtturm</strong> (63,30 m, höchster Deutschlands). Der Pilsumer wurde 1973 zum Kulturdenkmal erklärt. Seine Berühmtheit verdankt er Otto Waalkes' Film 'Otto – Der Außerfriesische' (1989).",
-    points: 100
-  },
-  {
-    nr: 2,
-    title: "Tor zur Geschichte",
-    location: "Zwillingsmühlen",
-    hint: "Vom Leuchtturm geht es weiter Richtung Greetsiel. Folgt dem Weg zum Ortskern. Bevor ihr den Hafen erreicht, begrüßen euch zwei farbenfrohe Wächter — ungleiche Geschwister, die seit Jahrhunderten den Wind ernten. Die ältere wurde 1706 errichtet, ihre Schwester ist gut 150 Jahre jünger.",
-    type: "quiz",
-    typeLabel: "Quiz",
-    task: "Die Greetsieler Zwillingsmühlen sind das Wahrzeichen des Ortes. Beide Mühlen haben unterschiedliche Funktionen und eine bewegte Geschichte. <strong>Welcher Mühlentyp sind die Zwillingsmühlen?</strong>",
-    choices: [
-      "Bockwindmühle",
-      "Galerieholländer",
-      "Turmwindmühle",
-      "Paltrockmühle"
+// =============================================================
+// I18N — Übersetzungen für UI und Stationen
+// =============================================================
+
+const UI = {
+  de: {
+    chooseLang: "Sprache wählen",
+    chooseLangSub: "Choose your language · Scegli la lingua · Elige tu idioma",
+    title: "Greetsiel-Rallye",
+    subtitle: "Schnitzeljagd durch das Fischerdorf",
+    howWorks: "Wie es funktioniert",
+    rules: "Spielregeln",
+    rulesItems: [
+      "<strong>8 Stationen</strong> führen euch durch Greetsiel und Umgebung",
+      "Jeder Hinweis verrät euch den nächsten Ort — findet ihn selbst",
+      "An jeder Station löst ihr eine <strong>Aufgabe</strong> (Quiz, Rätsel oder Foto)",
+      "Erst nach richtiger Antwort gibt es den nächsten Hinweis",
+      "Sammelt Punkte — wer am Ende die meisten hat, gewinnt!"
     ],
-    correct: 1,
-    reveal: "Richtig! Es sind <strong>Galerieholländer</strong> — eine Mühlenart, bei der nur die obere Kappe samt Flügeln gedreht werden kann. Die Galerie auf halber Höhe diente dem Müller, um die Flügel in den Wind zu stellen. Die rote Mühle stammt von 1706 (Wiederaufbau 1921), die grüne von 1856.",
-    points: 130
-  },
-  {
-    nr: 3,
-    title: "Das stille Fundament",
-    location: "Steinhaus",
-    hint: "Verlasst die Mühlen und geht in Richtung des historischen Ortskerns. Sucht ein backsteinernes Gebäude, das wie ein Zeitzeuge wirkt — errichtet um 1600 auf den Fundamenten eines Vorgängerbaus aus dem späten 14. Jahrhundert. Es gehörte einst einer berühmten ostfriesischen Häuptlingsfamilie, die später Grafen und Fürsten stellte.",
-    type: "code",
-    typeLabel: "Rätsel",
-    task: "Die Familie, die hier residierte, prägte Ostfriesland über Jahrhunderte. Ihr Name lautet rückwärts gelesen <strong>ANESKRIC</strong>. Vor dem Steinhaus findet ihr Hinweise auf das Gründungsjahr des Vorgängerbaus. <strong>In welchem Jahr wurde der Vorgängerbau des Steinhauses errichtet?</strong> (vierstellige Zahl)",
-    answer: "1390",
-    reveal: "Richtig! <strong>1390</strong> — die Cirksena waren ostfriesische Häuptlinge, die 1464 zur Reichsgrafenwürde erhoben wurden und bis 1744 die Grafschaft (später Fürstentum) Ostfriesland regierten. Das Steinhaus ist eines der ältesten Gebäude Greetsiels.",
-    points: 150
-  },
-  {
-    nr: 4,
-    title: "Wo der Geist wohnt",
-    location: "Evangelisch-reformierte Kirche",
-    hint: "Kein Dorf ohne Gotteshaus. Sucht das schlichte Backsteingebäude im Ortskern — es ist evangelisch-reformiert geprägt, wie es im calvinistischen Ostfriesland Tradition hat. Auf dem Dachreiter findet ihr einen Hinweis auf das Alter der Glocke, die angeblich zu den ältesten Niedersachsens zählt.",
-    type: "photo",
-    typeLabel: "Foto-Aufgabe",
-    task: "Macht ein <strong>Gruppenfoto</strong> vor dem Eingang der Kirche, auf dem alle Mitglieder eurer Gruppe zu sehen sind. Achtet darauf, dass das Kirchenportal im Hintergrund klar erkennbar ist. <em>Hinweis: Das Foto wird nur lokal auf eurem Gerät gespeichert.</em>",
-    reveal: "Sehr gut! Die evangelisch-reformierte Kirche Greetsiel wurde im 14. Jahrhundert errichtet. <strong>Reformiert</strong> bedeutet, dass die Gemeinde der calvinistischen Tradition folgt — typisch für Ostfriesland, das eine starke niederländisch geprägte reformierte Tradition hat (im Gegensatz zum überwiegend lutherischen Restdeutschland).",
-    points: 80
-  },
-  {
-    nr: 5,
-    title: "Die rote Flotte",
-    location: "Fischereihafen",
-    hint: "Folgt eurer Nase! Der Geruch von Salzwasser, Fisch und Diesel führt euch zum wirtschaftlichen Herzstück des Ortes. Hier liegen die bunten Boote, die täglich (außer am Wochenende) hinausfahren, um einen kleinen, rosa-roten Meeresbewohner zu fangen, der hier 'Granat' genannt wird.",
-    type: "quiz",
-    typeLabel: "Quiz",
-    task: "Greetsiel beheimatet die größte Krabbenkutterflotte Ostfrieslands und die zweitgrößte Deutschlands. <strong>Wie viele Krabbenkutter sind aktuell ungefähr im Greetsieler Hafen registriert?</strong>",
-    choices: [
-      "ca. 10",
-      "ca. 25",
-      "ca. 50",
-      "ca. 100"
+    rulesPlay: [
+      "Bewegt euch in der Gruppe und respektiert den Verkehr",
+      "Stört keine Anwohner und betretet keine Privatgrundstücke",
+      "Bei Fragen: Lehrkraft kontaktieren",
+      "Geplante Dauer: <strong>90–120 Minuten</strong>"
     ],
-    correct: 1,
-    reveal: "Richtig! Es sind <strong>ca. 25 Krabbenkutter</strong>. Nur Büsum hat in Deutschland eine größere Flotte. Die Greetsieler Kutter fangen vor allem Nordseegarnelen ('Granat'), aber auch Schollen und Seezungen. Tradition und Tourismus gehen hier Hand in Hand: Die bunten Kutter sind das meistfotografierte Motiv des Dorfes.",
-    points: 100
+    namePlaceholder: "Eure Namen (z. B. 'Anna, Ben, Lea')",
+    groupPlaceholder: "Gruppenname (optional)",
+    startBtn: "Rallye starten",
+    changeLang: "Sprache ändern",
+    stationOf: "Station",
+    pts: "Pkt.",
+    hintLabel: "Hinweis · Findet den Ort",
+    points: "Punkte",
+    answerPlaceholder: "Eure Antwort...",
+    photoTap: "Tippen zum Foto machen",
+    photoTaken: "Foto aufgenommen — tippen zum Ändern",
+    confirmPhoto: "Foto bestätigen",
+    checkAnswer: "Antwort prüfen",
+    chooseAnswer: "Bitte wählt eine Antwort aus.",
+    enterAnswer: "Bitte gebt eine Antwort ein.",
+    takePhotoFirst: "Bitte erst ein Foto aufnehmen.",
+    wrongQuiz: "Leider falsch. -10 Punkte. Versucht es nochmal!",
+    wrongCode: "Leider falsch. -10 Punkte. Lest den Hinweis nochmal genau!",
+    correctLabel: "✓ Richtig! +",
+    nextStation: "Weiter zur nächsten Station",
+    finishRally: "Rallye abschließen",
+    resetRally: "Rallye neu starten",
+    resetConfirm: "Wirklich neu starten? Alle Fortschritte gehen verloren.",
+    excellent: "🏆 Hervorragend!",
+    veryGood: "🌟 Sehr gut!",
+    good: "👍 Gut gemacht!",
+    completed: "✓ Ziel erreicht!",
+    ofPoints: "von",
+    pointsLabel: "Punkten",
+    stations: "Stationen",
+    minutes: "Minuten",
+    achieved: "erreicht",
+    shareResult: "Ergebnis teilen",
+    newRally: "Neue Rallye starten",
+    showTeacher: "Zeigt euer Ergebnis eurer Lehrkraft",
+    school: "Mariengymnasium Papenburg",
+    shareTitle: "Greetsiel-Rallye Ergebnis",
+    shareIntro: "🦐 Greetsiel-Rallye geschafft!",
+    sharePoints: "Punkten",
+    shareStations: "Stationen erkundet",
+    sharedToClipboard: "Ergebnis in die Zwischenablage kopiert!",
+    finalQuote: "Greetsiel ist mehr als nur ein Postkartenmotiv: 650 Jahre Geschichte, geprägt von Häuptlingsfamilien, dem Kampf gegen das Meer, einer eigenständigen reformierten Tradition und einer lebendigen Fischereiwirtschaft. Wer hier genauer hinsieht, entdeckt einen Mikrokosmos ostfriesischer Identität."
   },
-  {
-    nr: 6,
-    title: "Tide-Mathematik",
-    location: "Hafen / Schleuse",
-    hint: "Bleibt am Hafen, aber blickt aufs Wasser. Bis 1991 war Greetsiel ein Tide-Hafen — bei Ebbe lagen die Kutter im Schlick. Erst durch ein gigantisches Bauprojekt mit Schleuse und einer ins Watt reichenden Landzunge wurde der Hafen ganzjährig nutzbar.",
-    type: "code",
-    typeLabel: "Rätsel",
-    task: "Die Landzunge, die Greetsiel tideunabhängig macht, heißt <strong>Leyhörn</strong> (auch Leybuchthörn). Ihr Bau wurde 1991 abgeschlossen. <br><br>Berechnet: Wie viele Jahre liegt der Bau heute zurück, wenn wir das Jahr 2026 nehmen? Multipliziert das Ergebnis mit der Anzahl der Buchstaben im Wort 'GREETSIEL'. <strong>Wie lautet das Endergebnis?</strong>",
-    answer: "315",
-    reveal: "Richtig! 35 Jahre × 9 Buchstaben = <strong>315</strong>. Die Leyhörn ist ein interessantes Beispiel für Küstenschutz: Sie kombiniert Naturschutz (Vogelschutzgebiet) mit Wirtschaftsinteressen (tideunabhängiger Hafen) — ein typisch ostfriesischer Pragmatismus.",
-    points: 150
-  },
-  {
-    nr: 7,
-    title: "Das Hohe Haus",
-    location: "Hohes Haus / Giebelhäuser am Hafen",
-    hint: "Schlendert die Hafenstraße entlang. Eines der markantesten Gebäude wird seit über 150 Jahren als Gasthof genutzt, davor war es Sitz eines Verwalters, der die Steuern und Abgaben für den Landesherrn eintrieb. Sein Beruf gibt dem ehemaligen Bewohner einen Titel — wer war das?",
-    type: "code",
-    typeLabel: "Rätsel",
-    task: "Der ursprüngliche Bewohner des 'Hohen Hauses' verwaltete fürstliche Einkünfte und trieb Pachtzinsen ein. <strong>Wie lautet die historische Berufsbezeichnung dieses Verwalters?</strong> (ein Wort, endet auf '-meister')",
-    answer: "rentmeister",
-    reveal: "Richtig! Ein <strong>Rentmeister</strong> war im Mittelalter und der frühen Neuzeit ein fürstlicher Verwaltungsbeamter, der Pachten, Zinsen ('Renten') und Naturalabgaben eintrieb. In Greetsiel gehörten diese Einkünfte zur Grafschaft Ostfriesland. Heute beherbergt das Hohe Haus ein traditionsreiches Restaurant.",
-    points: 130
-  },
-  {
-    nr: 8,
-    title: "Wasser nach oben",
-    location: "Schöpfwerk Greetsiel",
-    hint: "Letzte Station! Verlasst den Trubel des Ortskerns Richtung Deich. Sucht ein technisches Bauwerk, das auf den ersten Blick unspektakulär aussieht, aber überlebenswichtig ist: Ohne dieses Gebäude würde halb Krummhörn unter Wasser stehen, denn das Binnenland liegt unter dem Meeresspiegel. Es wurde 1957 in Betrieb genommen.",
-    type: "quiz",
-    typeLabel: "Quiz",
-    task: "Das Greetsieler Schöpfwerk pumpt Wasser aus dem tiefliegenden Binnenland in die Nordsee. <strong>Wie viel Wasser kann jede der drei Pumpen pro Sekunde fördern?</strong>",
-    choices: [
-      "0,5 m³",
-      "4,5 m³",
-      "12 m³",
-      "25 m³"
+  it: {
+    chooseLang: "Scegli la lingua",
+    chooseLangSub: "Choose your language · Sprache wählen · Elige tu idioma",
+    title: "Caccia al tesoro Greetsiel",
+    subtitle: "Esplorazione del villaggio di pescatori",
+    howWorks: "Come funziona",
+    rules: "Regole del gioco",
+    rulesItems: [
+      "<strong>8 tappe</strong> vi guidano attraverso Greetsiel e dintorni",
+      "Ogni indizio rivela il luogo successivo — dovete trovarlo voi stessi",
+      "In ogni tappa risolvete un <strong>compito</strong> (quiz, enigma o foto)",
+      "Solo dopo la risposta corretta riceverete il prossimo indizio",
+      "Raccogliete punti — chi ne ha di più alla fine, vince!"
     ],
-    correct: 1,
-    reveal: "Richtig! Jede der drei 200-kW-Pumpen schafft <strong>4,5 m³ pro Sekunde</strong>. Zusammen also über 13 m³/s — etwa 50 Badewannen pro Sekunde. Solche Schöpfwerke sind in Ostfriesland überlebenswichtig, da große Teile der Krummhörn unter dem Meeresspiegel liegen. Bei Sturmfluten wäre ohne sie kein dauerhaftes Wirtschaften möglich.",
-    points: 100
+    rulesPlay: [
+      "Muovetevi in gruppo e rispettate il traffico",
+      "Non disturbate gli abitanti e non entrate in proprietà private",
+      "In caso di domande: contattate l'insegnante",
+      "Durata prevista: <strong>90–120 minuti</strong>"
+    ],
+    namePlaceholder: "I vostri nomi (es. 'Marco, Giulia, Luca')",
+    groupPlaceholder: "Nome del gruppo (facoltativo)",
+    startBtn: "Inizia la caccia",
+    changeLang: "Cambia lingua",
+    stationOf: "Tappa",
+    pts: "Pt.",
+    hintLabel: "Indizio · Trovate il luogo",
+    points: "Punti",
+    answerPlaceholder: "La vostra risposta...",
+    photoTap: "Tocca per scattare la foto",
+    photoTaken: "Foto scattata — tocca per cambiarla",
+    confirmPhoto: "Conferma foto",
+    checkAnswer: "Verifica risposta",
+    chooseAnswer: "Selezionate una risposta.",
+    enterAnswer: "Inserite una risposta.",
+    takePhotoFirst: "Scattate prima una foto.",
+    wrongQuiz: "Sbagliato. -10 punti. Riprovate!",
+    wrongCode: "Sbagliato. -10 punti. Rileggete l'indizio con attenzione!",
+    correctLabel: "✓ Corretto! +",
+    nextStation: "Avanti alla prossima tappa",
+    finishRally: "Concludi la caccia",
+    resetRally: "Ricomincia",
+    resetConfirm: "Ricominciare davvero? Tutti i progressi andranno persi.",
+    excellent: "🏆 Eccellente!",
+    veryGood: "🌟 Molto bene!",
+    good: "👍 Ben fatto!",
+    completed: "✓ Obiettivo raggiunto!",
+    ofPoints: "su",
+    pointsLabel: "punti",
+    stations: "Tappe",
+    minutes: "Minuti",
+    achieved: "raggiunto",
+    shareResult: "Condividi risultato",
+    newRally: "Nuova caccia",
+    showTeacher: "Mostrate il risultato all'insegnante",
+    school: "Mariengymnasium Papenburg",
+    shareTitle: "Risultato Caccia Greetsiel",
+    shareIntro: "🦐 Caccia al tesoro Greetsiel completata!",
+    sharePoints: "punti",
+    shareStations: "tappe esplorate",
+    sharedToClipboard: "Risultato copiato negli appunti!",
+    finalQuote: "Greetsiel è molto più di una cartolina: 650 anni di storia, segnati da famiglie di capi tribali, dalla lotta contro il mare, da una tradizione riformata indipendente e da una vivace economia della pesca. Chi guarda con attenzione scopre un microcosmo dell'identità della Frisia orientale."
+  },
+  es: {
+    chooseLang: "Elige tu idioma",
+    chooseLangSub: "Choose your language · Sprache wählen · Scegli la lingua",
+    title: "Búsqueda Greetsiel",
+    subtitle: "Recorrido por el pueblo pesquero",
+    howWorks: "Cómo funciona",
+    rules: "Reglas del juego",
+    rulesItems: [
+      "<strong>8 estaciones</strong> os guían por Greetsiel y alrededores",
+      "Cada pista revela el siguiente lugar — debéis encontrarlo vosotros",
+      "En cada estación resolvéis una <strong>tarea</strong> (quiz, enigma o foto)",
+      "Solo tras una respuesta correcta recibiréis la siguiente pista",
+      "¡Reunid puntos — quien más tenga al final, gana!"
+    ],
+    rulesPlay: [
+      "Moveos en grupo y respetad el tráfico",
+      "No molestéis a los vecinos ni entréis en propiedades privadas",
+      "Si tenéis dudas: contactad con el profesor/a",
+      "Duración prevista: <strong>90–120 minutos</strong>"
+    ],
+    namePlaceholder: "Vuestros nombres (ej. 'María, Juan, Sofía')",
+    groupPlaceholder: "Nombre del grupo (opcional)",
+    startBtn: "Empezar búsqueda",
+    changeLang: "Cambiar idioma",
+    stationOf: "Estación",
+    pts: "pts",
+    hintLabel: "Pista · Encontrad el lugar",
+    points: "Puntos",
+    answerPlaceholder: "Vuestra respuesta...",
+    photoTap: "Toca para hacer foto",
+    photoTaken: "Foto tomada — toca para cambiarla",
+    confirmPhoto: "Confirmar foto",
+    checkAnswer: "Comprobar respuesta",
+    chooseAnswer: "Seleccionad una respuesta.",
+    enterAnswer: "Introducid una respuesta.",
+    takePhotoFirst: "Haced primero una foto.",
+    wrongQuiz: "Incorrecto. -10 puntos. ¡Intentadlo de nuevo!",
+    wrongCode: "Incorrecto. -10 puntos. ¡Releed la pista con atención!",
+    correctLabel: "✓ ¡Correcto! +",
+    nextStation: "Siguiente estación",
+    finishRally: "Finalizar búsqueda",
+    resetRally: "Empezar de nuevo",
+    resetConfirm: "¿Seguro que queréis empezar de nuevo? Se perderá todo el progreso.",
+    excellent: "🏆 ¡Excelente!",
+    veryGood: "🌟 ¡Muy bien!",
+    good: "👍 ¡Buen trabajo!",
+    completed: "✓ ¡Meta alcanzada!",
+    ofPoints: "de",
+    pointsLabel: "puntos",
+    stations: "Estaciones",
+    minutes: "Minutos",
+    achieved: "logrado",
+    shareResult: "Compartir resultado",
+    newRally: "Nueva búsqueda",
+    showTeacher: "Mostrad el resultado al profesor/a",
+    school: "Mariengymnasium Papenburg",
+    shareTitle: "Resultado Búsqueda Greetsiel",
+    shareIntro: "🦐 ¡Búsqueda Greetsiel completada!",
+    sharePoints: "puntos",
+    shareStations: "estaciones exploradas",
+    sharedToClipboard: "¡Resultado copiado al portapapeles!",
+    finalQuote: "Greetsiel es mucho más que una postal: 650 años de historia, marcados por familias de jefes tribales, la lucha contra el mar, una tradición reformada propia y una viva economía pesquera. Quien observa con atención descubre un microcosmos de la identidad de Frisia Oriental."
   }
-];
+};
 
-const ABSCHLUSS_QUOTE = "Greetsiel ist mehr als nur ein Postkartenmotiv: 650 Jahre Geschichte, geprägt von Häuptlingsfamilien, dem Kampf gegen das Meer, einer eigenständigen reformierten Tradition und einer lebendigen Fischereiwirtschaft. Wer hier genauer hinsieht, entdeckt einen Mikrokosmos ostfriesischer Identität.";
+// =============================================================
+// STATIONEN — übersetzt
+// =============================================================
+const STATIONEN = {
+  de: [
+    {
+      nr: 1, title: "Otto's Wohnzimmer", location: "Pilsumer Leuchtturm",
+      hint: "Eure Reise beginnt nicht in Greetsiel selbst, sondern in der weiten Marschlandschaft davor. Folgt der Straße Richtung Pilsum und sucht ein knallig gelb-rot geringeltes Wahrzeichen mitten auf der Wiese. Es wurde durch einen ostfriesischen Komiker zur Legende — sein Film aus dem Jahr 1989 machte den Turm zum 'Wohnzimmer'.",
+      type: "code", typeLabel: "Rätsel",
+      task: "Der Pilsumer Leuchtturm wurde 1891 errichtet, aber bereits nach wenigen Jahrzehnten außer Dienst gestellt — er war zu niedrig. Otto Waalkes machte ihn mit seinem Film bekannt. <br><br><strong>In welchem Jahr wurde der Leuchtturm außer Betrieb genommen?</strong> (vierstellige Zahl)",
+      answer: "1915",
+      reveal: "Richtig! <strong>1915</strong> wurde der Pilsumer Leuchtturm außer Dienst gestellt — nach nur 24 Jahren Betrieb. Seine Aufgabe übernahm der weitaus höhere <strong>Campener Leuchtturm</strong> (63,30 m, höchster Deutschlands). Berühmt wurde der Turm durch Otto Waalkes' Film 'Otto – Der Außerfriesische' (1989).",
+      points: 100
+    },
+    {
+      nr: 2, title: "Tor zur Geschichte", location: "Zwillingsmühlen",
+      hint: "Vom Leuchtturm geht es weiter Richtung Greetsiel. Folgt dem Weg zum Ortskern. Bevor ihr den Hafen erreicht, begrüßen euch zwei farbenfrohe Wächter — ungleiche Geschwister, die seit Jahrhunderten den Wind ernten. Die ältere wurde 1706 errichtet, ihre Schwester ist gut 150 Jahre jünger.",
+      type: "quiz", typeLabel: "Quiz",
+      task: "Die Greetsieler Zwillingsmühlen sind das Wahrzeichen des Ortes. <strong>Welcher Mühlentyp sind die Zwillingsmühlen?</strong>",
+      choices: ["Bockwindmühle", "Galerieholländer", "Turmwindmühle", "Paltrockmühle"],
+      correct: 1,
+      reveal: "Richtig! Es sind <strong>Galerieholländer</strong> — eine Mühlenart, bei der nur die obere Kappe samt Flügeln gedreht werden kann. Die Galerie auf halber Höhe diente dem Müller, um die Flügel in den Wind zu stellen. Die rote Mühle stammt von 1706 (Wiederaufbau 1921), die grüne von 1856.",
+      points: 130
+    },
+    {
+      nr: 3, title: "Das stille Fundament", location: "Steinhaus",
+      hint: "Verlasst die Mühlen und geht in Richtung des historischen Ortskerns. Sucht ein backsteinernes Gebäude, das wie ein Zeitzeuge wirkt — errichtet um 1600 auf den Fundamenten eines Vorgängerbaus aus dem späten 14. Jahrhundert. Es gehörte einst einer berühmten ostfriesischen Häuptlingsfamilie.",
+      type: "code", typeLabel: "Rätsel",
+      task: "Die Familie, die hier residierte, prägte Ostfriesland über Jahrhunderte. Ihr Name lautet rückwärts gelesen <strong>ANESKRIC</strong>. <strong>In welchem Jahr wurde der Vorgängerbau des Steinhauses errichtet?</strong> (vierstellige Zahl)",
+      answer: "1390",
+      reveal: "Richtig! <strong>1390</strong> — die Cirksena waren ostfriesische Häuptlinge, die 1464 zur Reichsgrafenwürde erhoben wurden und bis 1744 die Grafschaft (später Fürstentum) Ostfriesland regierten. Das Steinhaus ist eines der ältesten Gebäude Greetsiels.",
+      points: 150
+    },
+    {
+      nr: 4, title: "Wo der Geist wohnt", location: "Evangelisch-reformierte Kirche",
+      hint: "Kein Dorf ohne Gotteshaus. Sucht das schlichte Backsteingebäude im Ortskern — es ist evangelisch-reformiert geprägt, wie es im calvinistischen Ostfriesland Tradition hat.",
+      type: "photo", typeLabel: "Foto-Aufgabe",
+      task: "Macht ein <strong>Gruppenfoto</strong> vor dem Eingang der Kirche, auf dem alle Mitglieder eurer Gruppe zu sehen sind. <em>Hinweis: Das Foto wird nur lokal auf eurem Gerät gespeichert.</em>",
+      reveal: "Sehr gut! Die evangelisch-reformierte Kirche Greetsiel wurde im 14. Jahrhundert errichtet. <strong>Reformiert</strong> bedeutet, dass die Gemeinde der calvinistischen Tradition folgt — typisch für Ostfriesland, das eine starke niederländisch geprägte reformierte Tradition hat (im Gegensatz zum überwiegend lutherischen Restdeutschland).",
+      points: 80
+    },
+    {
+      nr: 5, title: "Die rote Flotte", location: "Fischereihafen",
+      hint: "Folgt eurer Nase! Der Geruch von Salzwasser, Fisch und Diesel führt euch zum wirtschaftlichen Herzstück des Ortes. Hier liegen die bunten Boote, die täglich (außer am Wochenende) hinausfahren, um einen kleinen, rosa-roten Meeresbewohner zu fangen, der hier 'Granat' genannt wird.",
+      type: "quiz", typeLabel: "Quiz",
+      task: "Greetsiel beheimatet die größte Krabbenkutterflotte Ostfrieslands. <strong>Wie viele Krabbenkutter sind aktuell ungefähr im Greetsieler Hafen registriert?</strong>",
+      choices: ["ca. 10", "ca. 25", "ca. 50", "ca. 100"],
+      correct: 1,
+      reveal: "Richtig! Es sind <strong>ca. 25 Krabbenkutter</strong>. Nur Büsum hat in Deutschland eine größere Flotte. Die Greetsieler Kutter fangen vor allem Nordseegarnelen ('Granat'), aber auch Schollen und Seezungen.",
+      points: 100
+    },
+    {
+      nr: 6, title: "Tide-Mathematik", location: "Hafen / Schleuse",
+      hint: "Bleibt am Hafen, aber blickt aufs Wasser. Bis 1991 war Greetsiel ein Tide-Hafen — bei Ebbe lagen die Kutter im Schlick. Erst durch ein gigantisches Bauprojekt mit Schleuse und einer ins Watt reichenden Landzunge wurde der Hafen ganzjährig nutzbar.",
+      type: "code", typeLabel: "Rätsel",
+      task: "Die Landzunge, die Greetsiel tideunabhängig macht, heißt <strong>Leyhörn</strong>. Ihr Bau wurde 1991 abgeschlossen. <br><br>Berechnet: Wie viele Jahre liegt der Bau heute zurück (Jahr 2026)? Multipliziert das Ergebnis mit der Anzahl der Buchstaben im Wort 'GREETSIEL'. <strong>Wie lautet das Endergebnis?</strong>",
+      answer: "315",
+      reveal: "Richtig! 35 Jahre × 9 Buchstaben = <strong>315</strong>. Die Leyhörn ist ein interessantes Beispiel für Küstenschutz: Sie kombiniert Naturschutz (Vogelschutzgebiet) mit Wirtschaftsinteressen (tideunabhängiger Hafen).",
+      points: 150
+    },
+    {
+      nr: 7, title: "Das Hohe Haus", location: "Hohes Haus",
+      hint: "Schlendert die Hafenstraße entlang. Eines der markantesten Gebäude wird seit über 150 Jahren als Gasthof genutzt, davor war es Sitz eines Verwalters, der die Steuern und Abgaben für den Landesherrn eintrieb.",
+      type: "code", typeLabel: "Rätsel",
+      task: "Der ursprüngliche Bewohner des 'Hohen Hauses' verwaltete fürstliche Einkünfte und trieb Pachtzinsen ein. <strong>Wie lautet die historische Berufsbezeichnung dieses Verwalters?</strong> (ein Wort, endet auf '-meister')",
+      answer: "rentmeister",
+      reveal: "Richtig! Ein <strong>Rentmeister</strong> war im Mittelalter und der frühen Neuzeit ein fürstlicher Verwaltungsbeamter, der Pachten, Zinsen ('Renten') und Naturalabgaben eintrieb. Heute beherbergt das Hohe Haus ein traditionsreiches Restaurant.",
+      points: 130
+    },
+    {
+      nr: 8, title: "Wasser nach oben", location: "Schöpfwerk Greetsiel",
+      hint: "Letzte Station! Verlasst den Trubel des Ortskerns Richtung Deich. Sucht ein technisches Bauwerk, das auf den ersten Blick unspektakulär aussieht, aber überlebenswichtig ist: Ohne dieses Gebäude würde halb Krummhörn unter Wasser stehen.",
+      type: "quiz", typeLabel: "Quiz",
+      task: "Das Greetsieler Schöpfwerk pumpt Wasser aus dem tiefliegenden Binnenland in die Nordsee. <strong>Wie viel Wasser kann jede der drei Pumpen pro Sekunde fördern?</strong>",
+      choices: ["0,5 m³", "4,5 m³", "12 m³", "25 m³"],
+      correct: 1,
+      reveal: "Richtig! Jede der drei 200-kW-Pumpen schafft <strong>4,5 m³ pro Sekunde</strong>. Solche Schöpfwerke sind in Ostfriesland überlebenswichtig, da große Teile der Krummhörn unter dem Meeresspiegel liegen.",
+      points: 100
+    }
+  ],
+  it: [
+    {
+      nr: 1, title: "Il salotto di Otto", location: "Faro di Pilsum (Pilsumer Leuchtturm)",
+      hint: "Il vostro viaggio non inizia a Greetsiel, ma nella vasta pianura paludosa che la precede. Seguite la strada verso Pilsum e cercate un monumento a strisce giallo-rosse in mezzo al prato. È diventato leggenda grazie a un comico della Frisia orientale — il suo film del 1989 trasformò la torre in un 'salotto'.",
+      type: "code", typeLabel: "Enigma",
+      task: "Il Faro di Pilsum fu costruito nel 1891, ma dopo pochi decenni fu dismesso — era troppo basso. Otto Waalkes lo rese famoso con il suo film. <br><br><strong>In quale anno il faro fu messo fuori servizio?</strong> (numero di quattro cifre)",
+      answer: "1915",
+      reveal: "Corretto! Nel <strong>1915</strong> il Faro di Pilsum fu dismesso — dopo soli 24 anni di servizio. Il suo compito fu assunto dal molto più alto <strong>Faro di Campen</strong> (63,30 m, il più alto di Germania). La torre divenne famosa grazie al film di Otto Waalkes 'Otto – Der Außerfriesische' (1989).",
+      points: 100
+    },
+    {
+      nr: 2, title: "Porta della storia", location: "Mulini gemelli (Zwillingsmühlen)",
+      hint: "Dal faro proseguite verso Greetsiel. Seguite la strada fino al centro del paese. Prima di raggiungere il porto vi accolgono due colorati guardiani — fratelli diversi che da secoli raccolgono il vento. Il più vecchio fu costruito nel 1706, la sorella è di circa 150 anni più giovane.",
+      type: "quiz", typeLabel: "Quiz",
+      task: "I Mulini gemelli di Greetsiel sono il simbolo del villaggio. <strong>Di che tipo di mulini si tratta?</strong>",
+      choices: ["Mulino a cavalletto (Bockwindmühle)", "Mulino olandese a galleria (Galerieholländer)", "Mulino a torre (Turmwindmühle)", "Mulino Paltrock (Paltrockmühle)"],
+      correct: 1,
+      reveal: "Corretto! Sono <strong>mulini olandesi a galleria (Galerieholländer)</strong> — un tipo in cui solo la cappa superiore con le pale può ruotare. La galleria a metà altezza serviva al mugnaio per orientare le pale al vento. Il mulino rosso è del 1706 (ricostruito nel 1921), quello verde del 1856.",
+      points: 130
+    },
+    {
+      nr: 3, title: "La fondazione silenziosa", location: "Steinhaus (Casa di pietra)",
+      hint: "Lasciate i mulini e dirigetevi verso il centro storico. Cercate un edificio in mattoni che sembra un testimone del tempo — costruito intorno al 1600 sulle fondamenta di un edificio precedente del tardo XIV secolo. Apparteneva a una famosa famiglia di capi tribali della Frisia orientale.",
+      type: "code", typeLabel: "Enigma",
+      task: "La famiglia che vi risiedeva ha segnato la Frisia orientale per secoli. Il loro nome letto al contrario è <strong>ANESKRIC</strong>. <strong>In quale anno fu costruito l'edificio precedente dello Steinhaus?</strong> (numero di quattro cifre)",
+      answer: "1390",
+      reveal: "Corretto! <strong>1390</strong> — i Cirksena erano capi tribali della Frisia orientale, elevati nel 1464 al rango di conti dell'Impero, e regnarono sulla Contea (poi Principato) di Frisia orientale fino al 1744. Lo Steinhaus è uno degli edifici più antichi di Greetsiel.",
+      points: 150
+    },
+    {
+      nr: 4, title: "Dove abita lo spirito", location: "Chiesa evangelica riformata",
+      hint: "Nessun villaggio senza chiesa. Cercate il sobrio edificio in mattoni nel centro — è di tradizione evangelica riformata, come si usa nella Frisia orientale calvinista.",
+      type: "photo", typeLabel: "Compito fotografico",
+      task: "Fate una <strong>foto di gruppo</strong> davanti all'ingresso della chiesa, in cui siano visibili tutti i membri del vostro gruppo. <em>Nota: la foto viene salvata solo localmente sul vostro dispositivo.</em>",
+      reveal: "Molto bene! La chiesa evangelica riformata di Greetsiel fu costruita nel XIV secolo. <strong>Riformata</strong> significa che la comunità segue la tradizione calvinista — tipico della Frisia orientale, che ha una forte tradizione riformata di influenza olandese (a differenza del resto della Germania prevalentemente luterana).",
+      points: 80
+    },
+    {
+      nr: 5, title: "La flotta rossa", location: "Porto peschereccio",
+      hint: "Seguite il vostro naso! L'odore di acqua salata, pesce e gasolio vi guiderà al cuore economico del villaggio. Qui sono ormeggiate le barche colorate che ogni giorno (escluso il fine settimana) escono per pescare un piccolo crostaceo rosa-rosso, qui chiamato 'Granat'.",
+      type: "quiz", typeLabel: "Quiz",
+      task: "Greetsiel ospita la più grande flotta di pescherecci da gamberi della Frisia orientale. <strong>Quanti pescherecci sono attualmente registrati nel porto di Greetsiel?</strong>",
+      choices: ["circa 10", "circa 25", "circa 50", "circa 100"],
+      correct: 1,
+      reveal: "Corretto! Sono <strong>circa 25 pescherecci</strong>. Solo Büsum ha una flotta più grande in Germania. I pescherecci di Greetsiel pescano principalmente gamberi del Mare del Nord ('Granat'), ma anche passere e sogliole.",
+      points: 100
+    },
+    {
+      nr: 6, title: "Matematica delle maree", location: "Porto / Chiusa",
+      hint: "Restate al porto, ma guardate l'acqua. Fino al 1991 Greetsiel era un porto di marea — con la bassa marea i pescherecci finivano nel fango. Solo grazie a un gigantesco progetto con chiusa e una lingua di terra che si estende nel Watt il porto è diventato accessibile tutto l'anno.",
+      type: "code", typeLabel: "Enigma",
+      task: "La lingua di terra che rende Greetsiel indipendente dalle maree si chiama <strong>Leyhörn</strong>. La sua costruzione fu completata nel 1991. <br><br>Calcolate: quanti anni sono passati dalla costruzione (anno 2026)? Moltiplicate il risultato per il numero di lettere della parola 'GREETSIEL'. <strong>Qual è il risultato finale?</strong>",
+      answer: "315",
+      reveal: "Corretto! 35 anni × 9 lettere = <strong>315</strong>. La Leyhörn è un interessante esempio di protezione costiera: combina protezione della natura (riserva ornitologica) con interessi economici (porto indipendente dalle maree).",
+      points: 150
+    },
+    {
+      nr: 7, title: "La Casa Alta", location: "Hohes Haus (Casa Alta)",
+      hint: "Passeggiate lungo la via del porto. Uno degli edifici più caratteristici è da oltre 150 anni una locanda; in precedenza era la sede di un amministratore che riscuoteva tasse e tributi per il signore del territorio.",
+      type: "code", typeLabel: "Enigma",
+      task: "L'abitante originale dell'Hohes Haus amministrava le entrate principesche e riscuoteva i canoni d'affitto. <strong>Qual è il nome storico tedesco di questo amministratore?</strong> (una parola, finisce con '-meister')",
+      answer: "rentmeister",
+      reveal: "Corretto! Un <strong>Rentmeister</strong> era nel Medioevo e nella prima età moderna un funzionario amministrativo principesco che riscuoteva affitti, interessi ('Renten') e tributi in natura. Oggi l'Hohes Haus ospita un ristorante tradizionale.",
+      points: 130
+    },
+    {
+      nr: 8, title: "Acqua verso l'alto", location: "Idrovora (Schöpfwerk)",
+      hint: "Ultima tappa! Lasciate il trambusto del centro e dirigetevi verso la diga. Cercate una struttura tecnica che a prima vista sembra poco spettacolare, ma è vitale: senza questo edificio metà della Krummhörn sarebbe sott'acqua.",
+      type: "quiz", typeLabel: "Quiz",
+      task: "L'idrovora di Greetsiel pompa acqua dall'entroterra basso verso il Mare del Nord. <strong>Quanta acqua può sollevare ciascuna delle tre pompe al secondo?</strong>",
+      choices: ["0,5 m³", "4,5 m³", "12 m³", "25 m³"],
+      correct: 1,
+      reveal: "Corretto! Ognuna delle tre pompe da 200 kW solleva <strong>4,5 m³ al secondo</strong>. Tali idrovore sono vitali nella Frisia orientale, poiché vaste zone della Krummhörn si trovano sotto il livello del mare.",
+      points: 100
+    }
+  ],
+  es: [
+    {
+      nr: 1, title: "El salón de Otto", location: "Faro de Pilsum (Pilsumer Leuchtturm)",
+      hint: "Vuestro viaje no comienza en Greetsiel, sino en el amplio paisaje de marismas anterior. Seguid la carretera hacia Pilsum y buscad un monumento de rayas amarillas y rojas en medio del prado. Se hizo legendario gracias a un cómico de Frisia Oriental — su película de 1989 convirtió la torre en un 'salón'.",
+      type: "code", typeLabel: "Enigma",
+      task: "El Faro de Pilsum fue construido en 1891, pero pocas décadas después fue retirado del servicio — era demasiado bajo. Otto Waalkes lo hizo famoso con su película. <br><br><strong>¿En qué año fue retirado del servicio el faro?</strong> (número de cuatro cifras)",
+      answer: "1915",
+      reveal: "¡Correcto! En <strong>1915</strong> el Faro de Pilsum fue retirado del servicio — tras solo 24 años de funcionamiento. Su tarea fue asumida por el mucho más alto <strong>Faro de Campen</strong> (63,30 m, el más alto de Alemania). La torre se hizo famosa gracias a la película de Otto Waalkes 'Otto – Der Außerfriesische' (1989).",
+      points: 100
+    },
+    {
+      nr: 2, title: "Puerta de la historia", location: "Molinos gemelos (Zwillingsmühlen)",
+      hint: "Desde el faro continuad hacia Greetsiel. Seguid el camino hasta el centro del pueblo. Antes de llegar al puerto os reciben dos guardianes coloridos — hermanos desiguales que llevan siglos cosechando el viento. El mayor fue construido en 1706, su hermana es unos 150 años más joven.",
+      type: "quiz", typeLabel: "Quiz",
+      task: "Los Molinos gemelos de Greetsiel son el símbolo del pueblo. <strong>¿De qué tipo de molinos se trata?</strong>",
+      choices: ["Molino de caballete (Bockwindmühle)", "Molino holandés con galería (Galerieholländer)", "Molino de torre (Turmwindmühle)", "Molino Paltrock (Paltrockmühle)"],
+      correct: 1,
+      reveal: "¡Correcto! Son <strong>molinos holandeses con galería (Galerieholländer)</strong> — un tipo en el que solo la caperuza superior con las aspas puede girar. La galería a media altura servía al molinero para orientar las aspas al viento. El molino rojo es de 1706 (reconstruido en 1921), el verde de 1856.",
+      points: 130
+    },
+    {
+      nr: 3, title: "El fundamento silencioso", location: "Steinhaus (Casa de piedra)",
+      hint: "Dejad los molinos y dirigíos al casco histórico. Buscad un edificio de ladrillo que parece un testigo del tiempo — construido hacia 1600 sobre los cimientos de un edificio anterior de finales del siglo XIV. Perteneció a una famosa familia de jefes tribales de Frisia Oriental.",
+      type: "code", typeLabel: "Enigma",
+      task: "La familia que residía aquí marcó Frisia Oriental durante siglos. Su nombre leído al revés es <strong>ANESKRIC</strong>. <strong>¿En qué año se construyó el edificio anterior de la Steinhaus?</strong> (número de cuatro cifras)",
+      answer: "1390",
+      reveal: "¡Correcto! <strong>1390</strong> — los Cirksena fueron jefes tribales de Frisia Oriental, elevados en 1464 al rango de Condes del Imperio, y gobernaron el Condado (luego Principado) de Frisia Oriental hasta 1744. La Steinhaus es uno de los edificios más antiguos de Greetsiel.",
+      points: 150
+    },
+    {
+      nr: 4, title: "Donde habita el espíritu", location: "Iglesia evangélica reformada",
+      hint: "No hay pueblo sin iglesia. Buscad el sobrio edificio de ladrillo en el centro — es de tradición evangélica reformada, como es habitual en la Frisia Oriental calvinista.",
+      type: "photo", typeLabel: "Tarea fotográfica",
+      task: "Haced una <strong>foto de grupo</strong> ante la entrada de la iglesia, en la que se vean todos los miembros de vuestro grupo. <em>Nota: la foto se guarda solo localmente en vuestro dispositivo.</em>",
+      reveal: "¡Muy bien! La iglesia evangélica reformada de Greetsiel fue construida en el siglo XIV. <strong>Reformada</strong> significa que la comunidad sigue la tradición calvinista — típico de Frisia Oriental, que tiene una fuerte tradición reformada de influencia neerlandesa (a diferencia del resto de Alemania, mayoritariamente luterana).",
+      points: 80
+    },
+    {
+      nr: 5, title: "La flota roja", location: "Puerto pesquero",
+      hint: "¡Seguid vuestra nariz! El olor a agua salada, pescado y gasoil os guiará al corazón económico del pueblo. Aquí están amarradas las coloridas barcas que diariamente (excepto los fines de semana) salen a pescar un pequeño crustáceo rosa-rojizo, aquí llamado 'Granat'.",
+      type: "quiz", typeLabel: "Quiz",
+      task: "Greetsiel alberga la mayor flota camaronera de Frisia Oriental. <strong>¿Cuántos camaroneros están actualmente registrados en el puerto de Greetsiel?</strong>",
+      choices: ["aprox. 10", "aprox. 25", "aprox. 50", "aprox. 100"],
+      correct: 1,
+      reveal: "¡Correcto! Son <strong>aprox. 25 camaroneros</strong>. Solo Büsum tiene una flota mayor en Alemania. Los camaroneros de Greetsiel pescan sobre todo camarón del Mar del Norte ('Granat'), pero también platijas y lenguados.",
+      points: 100
+    },
+    {
+      nr: 6, title: "Matemáticas de las mareas", location: "Puerto / Esclusa",
+      hint: "Quedaos en el puerto, pero mirad el agua. Hasta 1991 Greetsiel era un puerto de marea — con la bajamar los barcos quedaban en el fango. Solo gracias a un gigantesco proyecto con esclusa y una lengua de tierra que se adentra en el Watt el puerto se hizo accesible todo el año.",
+      type: "code", typeLabel: "Enigma",
+      task: "La lengua de tierra que hace a Greetsiel independiente de las mareas se llama <strong>Leyhörn</strong>. Su construcción se completó en 1991. <br><br>Calculad: ¿cuántos años han pasado desde la construcción (año 2026)? Multiplicad el resultado por el número de letras de la palabra 'GREETSIEL'. <strong>¿Cuál es el resultado final?</strong>",
+      answer: "315",
+      reveal: "¡Correcto! 35 años × 9 letras = <strong>315</strong>. La Leyhörn es un interesante ejemplo de protección costera: combina la protección de la naturaleza (reserva ornitológica) con intereses económicos (puerto independiente de las mareas).",
+      points: 150
+    },
+    {
+      nr: 7, title: "La Casa Alta", location: "Hohes Haus (Casa Alta)",
+      hint: "Pasead por la calle del puerto. Uno de los edificios más característicos es desde hace más de 150 años una posada; antes fue la sede de un administrador que recaudaba impuestos y tributos para el señor del territorio.",
+      type: "code", typeLabel: "Enigma",
+      task: "El habitante original del Hohes Haus administraba los ingresos principescos y cobraba los censos. <strong>¿Cuál es el nombre histórico alemán de este administrador?</strong> (una palabra, termina en '-meister')",
+      answer: "rentmeister",
+      reveal: "¡Correcto! Un <strong>Rentmeister</strong> era en la Edad Media y la Edad Moderna temprana un funcionario administrativo principesco que cobraba arrendamientos, intereses ('Renten') y tributos en especie. Hoy la Hohes Haus alberga un restaurante tradicional.",
+      points: 130
+    },
+    {
+      nr: 8, title: "Agua hacia arriba", location: "Estación de bombeo (Schöpfwerk)",
+      hint: "¡Última estación! Dejad el bullicio del centro y dirigíos al dique. Buscad una construcción técnica que a primera vista parece poco espectacular, pero es vital: sin este edificio media Krummhörn estaría bajo el agua.",
+      type: "quiz", typeLabel: "Quiz",
+      task: "La estación de bombeo de Greetsiel bombea agua de la zona interior baja al Mar del Norte. <strong>¿Cuánta agua puede elevar cada una de las tres bombas por segundo?</strong>",
+      choices: ["0,5 m³", "4,5 m³", "12 m³", "25 m³"],
+      correct: 1,
+      reveal: "¡Correcto! Cada una de las tres bombas de 200 kW eleva <strong>4,5 m³ por segundo</strong>. Estas estaciones de bombeo son vitales en Frisia Oriental, ya que grandes zonas de la Krummhörn se encuentran bajo el nivel del mar.",
+      points: 100
+    }
+  ]
+};
 
+// =============================================================
+// STATE
+// =============================================================
 let state = {
+  lang: null,
   name: "", groupName: "", currentStation: 0,
   totalPoints: 0, answers: [], startTime: null, finished: false
 };
@@ -513,53 +873,88 @@ function loadState() {
   } catch(e) {}
 }
 function resetState() {
-  if (confirm("Wirklich neu starten? Alle Fortschritte gehen verloren.")) {
+  const t = state.lang ? UI[state.lang] : UI.de;
+  if (confirm(t.resetConfirm)) {
     localStorage.removeItem('greetsiel-rallye');
-    state = { name: "", groupName: "", currentStation: 0, totalPoints: 0, answers: [], startTime: null, finished: false };
+    state = { lang: null, name: "", groupName: "", currentStation: 0, totalPoints: 0, answers: [], startTime: null, finished: false };
     render();
   }
+}
+function changeLang() {
+  state.lang = null;
+  saveState();
+  render();
 }
 
 const app = document.getElementById('app');
 
 function render() {
-  if (!state.startTime || !state.name) renderStart();
-  else if (state.finished || state.currentStation >= STATIONEN.length) renderFinal();
+  if (!state.lang) renderLangChoice();
+  else if (!state.startTime || !state.name) renderStart();
+  else if (state.finished || state.currentStation >= STATIONEN[state.lang].length) renderFinal();
   else renderStation();
 }
 
+function selectLang(lang) {
+  state.lang = lang;
+  document.documentElement.lang = lang;
+  saveState();
+  render();
+}
+
+function renderLangChoice() {
+  app.innerHTML = `
+    <div class="lang-screen">
+      <div class="lang-emoji">🦐</div>
+      <h1 class="lang-title">${UI.de.chooseLang} / ${UI.it.chooseLang} / ${UI.es.chooseLang}</h1>
+      <div class="lang-subtitle">Greetsiel-Rallye · Mariengymnasium Papenburg</div>
+
+      <button class="lang-btn" onclick="selectLang('de')">
+        <span class="lang-flag">🇩🇪</span>
+        <span class="lang-name">Deutsch</span>
+        <span class="lang-arrow">›</span>
+      </button>
+      <button class="lang-btn" onclick="selectLang('it')">
+        <span class="lang-flag">🇮🇹</span>
+        <span class="lang-name">Italiano</span>
+        <span class="lang-arrow">›</span>
+      </button>
+      <button class="lang-btn" onclick="selectLang('es')">
+        <span class="lang-flag">🇪🇸</span>
+        <span class="lang-name">Español</span>
+        <span class="lang-arrow">›</span>
+      </button>
+    </div>
+  `;
+}
+
 function renderStart() {
+  const t = UI[state.lang];
   app.innerHTML = `
     <div class="start-screen">
       <div class="start-emoji">🦐</div>
-      <h1 class="start-title">Greetsiel-Rallye</h1>
-      <div class="start-subtitle">Schnitzeljagd durch das Fischerdorf</div>
+      <h1 class="start-title">${t.title}</h1>
+      <div class="start-subtitle">${t.subtitle}</div>
 
       <div class="start-card">
-        <h3>Wie es funktioniert</h3>
+        <h3>${t.howWorks}</h3>
         <ul>
-          <li><strong>8 Stationen</strong> führen euch durch Greetsiel und Umgebung</li>
-          <li>Jeder Hinweis verrät euch den nächsten Ort — findet ihn selbst</li>
-          <li>An jeder Station löst ihr eine <strong>Aufgabe</strong> (Quiz, Rätsel oder Foto)</li>
-          <li>Erst nach richtiger Antwort gibt es den nächsten Hinweis</li>
-          <li>Sammelt Punkte — wer am Ende die meisten hat, gewinnt!</li>
+          ${t.rulesItems.map(li => `<li>${li}</li>`).join('')}
         </ul>
       </div>
 
       <div class="start-card">
-        <h3>Spielregeln</h3>
+        <h3>${t.rules}</h3>
         <ul>
-          <li>Bewegt euch in der Gruppe und respektiert den Verkehr</li>
-          <li>Stört keine Anwohner und betretet keine Privatgrundstücke</li>
-          <li>Bei Fragen: Lehrkraft kontaktieren</li>
-          <li>Geplante Dauer: <strong>90–120 Minuten</strong></li>
+          ${t.rulesPlay.map(li => `<li>${li}</li>`).join('')}
         </ul>
       </div>
 
-      <input type="text" class="name-input" id="player-name" placeholder="Eure Namen (z. B. 'Anna, Ben, Lea')" maxlength="50">
-      <input type="text" class="name-input" id="group-name" placeholder="Gruppenname (optional)" maxlength="30">
+      <input type="text" class="name-input" id="player-name" placeholder="${t.namePlaceholder}" maxlength="50">
+      <input type="text" class="name-input" id="group-name" placeholder="${t.groupPlaceholder}" maxlength="30">
 
-      <button class="btn-primary" onclick="startRallye()">Rallye starten</button>
+      <button class="btn-primary" onclick="startRallye()">${t.startBtn}</button>
+      <div class="lang-switch-link" onclick="changeLang()">🌐 ${t.changeLang}</div>
     </div>
   `;
 }
@@ -582,8 +977,10 @@ function startRallye() {
 }
 
 function renderStation() {
-  const s = STATIONEN[state.currentStation];
-  const progress = ((state.currentStation) / STATIONEN.length) * 100;
+  const t = UI[state.lang];
+  const stations = STATIONEN[state.lang];
+  const s = stations[state.currentStation];
+  const progress = ((state.currentStation) / stations.length) * 100;
 
   let aufgabeHtml = '';
   if (s.type === 'quiz') {
@@ -593,47 +990,47 @@ function renderStation() {
           <button class="choice-btn" onclick="selectChoice(${i})" data-idx="${i}">${c}</button>
         `).join('')}
       </div>
-      <button class="btn-primary" style="margin-top:14px" onclick="checkQuiz()">Antwort prüfen</button>
+      <button class="btn-primary" style="margin-top:14px" onclick="checkQuiz()">${t.checkAnswer}</button>
     `;
   } else if (s.type === 'code') {
     aufgabeHtml = `
-      <input type="text" class="answer-input" id="code-answer" placeholder="Eure Antwort..." autocapitalize="off" autocomplete="off">
-      <button class="btn-primary" style="margin-top:12px" onclick="checkCode()">Antwort prüfen</button>
+      <input type="text" class="answer-input" id="code-answer" placeholder="${t.answerPlaceholder}" autocapitalize="off" autocomplete="off">
+      <button class="btn-primary" style="margin-top:12px" onclick="checkCode()">${t.checkAnswer}</button>
     `;
   } else if (s.type === 'photo') {
     aufgabeHtml = `
       <label class="photo-upload" id="photo-label">
         <input type="file" accept="image/*" capture="environment" id="photo-input" onchange="handlePhoto(event)">
         <div class="photo-icon">📸</div>
-        <div class="photo-text">Tippen zum Foto machen</div>
+        <div class="photo-text">${t.photoTap}</div>
       </label>
-      <button class="btn-primary" style="margin-top:14px; opacity:0.5" id="photo-submit" disabled onclick="submitPhoto()">Foto bestätigen</button>
+      <button class="btn-primary" style="margin-top:14px; opacity:0.5" id="photo-submit" disabled onclick="submitPhoto()">${t.confirmPhoto}</button>
     `;
   }
 
   app.innerHTML = `
     <div class="topbar">
-      <div class="progress">Station ${state.currentStation + 1} / ${STATIONEN.length}</div>
-      <div class="points">${state.totalPoints} Pkt.</div>
+      <div class="progress">${t.stationOf} ${state.currentStation + 1} / ${stations.length}</div>
+      <div class="points">${state.totalPoints} ${t.pts}</div>
     </div>
     <div class="progress-bar">
       <div class="progress-fill" style="width:${progress}%"></div>
     </div>
 
     <div class="hint-card">
-      <div class="hint-label">Hinweis · Findet den Ort</div>
+      <div class="hint-label">${t.hintLabel}</div>
       <div class="hint-text">${s.hint}</div>
     </div>
 
     <div class="question-card">
-      <div class="task-type">${s.typeLabel} · ${s.points} Punkte</div>
+      <div class="task-type">${s.typeLabel} · ${s.points} ${t.points}</div>
       <h2 class="station-title">${s.title}</h2>
       <div class="task-text">${s.task}</div>
       <div id="feedback-area"></div>
       <div id="task-area">${aufgabeHtml}</div>
     </div>
 
-    <div class="skip-link" onclick="resetState()">Rallye neu starten</div>
+    <div class="skip-link" onclick="resetState()">${t.resetRally}</div>
   `;
 }
 
@@ -648,9 +1045,11 @@ function selectChoice(idx) {
 }
 
 function checkQuiz() {
-  const s = STATIONEN[state.currentStation];
+  const t = UI[state.lang];
+  const stations = STATIONEN[state.lang];
+  const s = stations[state.currentStation];
   if (currentChoice === -1) {
-    showFeedback("Bitte wähle eine Antwort aus.", false);
+    showFeedback(t.chooseAnswer, false);
     return;
   }
   if (currentChoice === s.correct) {
@@ -658,7 +1057,7 @@ function checkQuiz() {
   } else {
     state.totalPoints = Math.max(0, state.totalPoints - 10);
     saveState();
-    showFeedback("Leider falsch. -10 Punkte. Versucht es nochmal!", false);
+    showFeedback(t.wrongQuiz, false);
     document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
     currentChoice = -1;
     updatePoints();
@@ -666,11 +1065,13 @@ function checkQuiz() {
 }
 
 function checkCode() {
-  const s = STATIONEN[state.currentStation];
+  const t = UI[state.lang];
+  const stations = STATIONEN[state.lang];
+  const s = stations[state.currentStation];
   const inp = document.getElementById('code-answer');
   const val = (inp.value || '').trim().toLowerCase();
   if (!val) {
-    showFeedback("Bitte gib eine Antwort ein.", false);
+    showFeedback(t.enterAnswer, false);
     return;
   }
   const correct = String(s.answer).toLowerCase();
@@ -679,12 +1080,13 @@ function checkCode() {
   } else {
     state.totalPoints = Math.max(0, state.totalPoints - 10);
     saveState();
-    showFeedback("Leider falsch. -10 Punkte. Lest den Hinweis nochmal genau!", false);
+    showFeedback(t.wrongCode, false);
     updatePoints();
   }
 }
 
 function handlePhoto(e) {
+  const t = UI[state.lang];
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
@@ -695,7 +1097,7 @@ function handlePhoto(e) {
     label.innerHTML = `
       <input type="file" accept="image/*" capture="environment" id="photo-input" onchange="handlePhoto(event)">
       <img src="${currentPhoto}" class="photo-preview">
-      <div class="photo-text" style="margin-top:10px">Foto aufgenommen — tippen zum Ändern</div>
+      <div class="photo-text" style="margin-top:10px">${t.photoTaken}</div>
     `;
     const btn = document.getElementById('photo-submit');
     btn.disabled = false;
@@ -705,25 +1107,29 @@ function handlePhoto(e) {
 }
 
 function submitPhoto() {
-  const s = STATIONEN[state.currentStation];
+  const t = UI[state.lang];
+  const stations = STATIONEN[state.lang];
+  const s = stations[state.currentStation];
   if (!currentPhoto) {
-    showFeedback("Bitte erst ein Foto aufnehmen.", false);
+    showFeedback(t.takePhotoFirst, false);
     return;
   }
   onCorrect(s);
 }
 
 function onCorrect(s) {
+  const t = UI[state.lang];
+  const stations = STATIONEN[state.lang];
   state.totalPoints += s.points;
   state.answers.push({ station: s.nr, title: s.title, points: s.points });
 
   document.getElementById('task-area').innerHTML = `
     <div class="reveal-card">
-      <div class="reveal-label">✓ Richtig! +${s.points} Punkte</div>
+      <div class="reveal-label">${t.correctLabel}${s.points} ${t.points}</div>
       <div class="reveal-text">${s.reveal}</div>
     </div>
     <button class="btn-primary" onclick="nextStation()">
-      ${state.currentStation + 1 >= STATIONEN.length ? 'Rallye abschließen' : 'Weiter zur nächsten Station'}
+      ${state.currentStation + 1 >= stations.length ? t.finishRally : t.nextStation}
     </button>
   `;
   document.getElementById('feedback-area').innerHTML = '';
@@ -734,8 +1140,9 @@ function onCorrect(s) {
 }
 
 function nextStation() {
+  const stations = STATIONEN[state.lang];
   state.currentStation++;
-  if (state.currentStation >= STATIONEN.length) state.finished = true;
+  if (state.currentStation >= stations.length) state.finished = true;
   saveState();
   render();
   window.scrollTo(0, 0);
@@ -747,20 +1154,23 @@ function showFeedback(msg, ok) {
 }
 
 function updatePoints() {
+  const t = UI[state.lang];
   const pointsEl = document.querySelector('.points');
-  if (pointsEl) pointsEl.textContent = state.totalPoints + ' Pkt.';
+  if (pointsEl) pointsEl.textContent = state.totalPoints + ' ' + t.pts;
 }
 
 function renderFinal() {
+  const t = UI[state.lang];
+  const stations = STATIONEN[state.lang];
   const dauer = Math.round((Date.now() - state.startTime) / 60000);
-  const maxPunkte = STATIONEN.reduce((sum, s) => sum + s.points, 0);
+  const maxPunkte = stations.reduce((sum, s) => sum + s.points, 0);
   const prozent = Math.round((state.totalPoints / maxPunkte) * 100);
 
   let bewertung = "";
-  if (prozent >= 90) bewertung = "🏆 Hervorragend!";
-  else if (prozent >= 75) bewertung = "🌟 Sehr gut!";
-  else if (prozent >= 60) bewertung = "👍 Gut gemacht!";
-  else bewertung = "✓ Ziel erreicht!";
+  if (prozent >= 90) bewertung = t.excellent;
+  else if (prozent >= 75) bewertung = t.veryGood;
+  else if (prozent >= 60) bewertung = t.good;
+  else bewertung = t.completed;
 
   app.innerHTML = `
     <div class="final-screen">
@@ -770,40 +1180,40 @@ function renderFinal() {
 
       <div class="final-score-card">
         <div class="final-points">${state.totalPoints}</div>
-        <div class="final-points-label">von ${maxPunkte} Punkten</div>
+        <div class="final-points-label">${t.ofPoints} ${maxPunkte} ${t.pointsLabel}</div>
         <div class="final-stats">
-          <div><span class="final-stat-num">${STATIONEN.length}</span>Stationen</div>
-          <div><span class="final-stat-num">${dauer}</span>Minuten</div>
-          <div><span class="final-stat-num">${prozent}%</span>erreicht</div>
+          <div><span class="final-stat-num">${stations.length}</span>${t.stations}</div>
+          <div><span class="final-stat-num">${dauer}</span>${t.minutes}</div>
+          <div><span class="final-stat-num">${prozent}%</span>${t.achieved}</div>
         </div>
       </div>
 
-      <div class="final-quote">"${ABSCHLUSS_QUOTE}"</div>
+      <div class="final-quote">"${t.finalQuote}"</div>
 
-      <button class="btn-primary" onclick="shareResult()">Ergebnis teilen</button>
-      <button class="btn-secondary" onclick="resetState()">Neue Rallye starten</button>
+      <button class="btn-primary" onclick="shareResult()">${t.shareResult}</button>
+      <button class="btn-secondary" onclick="resetState()">${t.newRally}</button>
 
       <div class="footer-note">
-        Zeigt euer Ergebnis eurer Lehrkraft<br>
-        Mariengymnasium Papenburg
+        ${t.showTeacher}<br>
+        ${t.school}
       </div>
     </div>
   `;
 }
 
 function shareResult() {
-  const maxPunkte = STATIONEN.reduce((sum, s) => sum + s.points, 0);
-  const text = `🦐 Greetsiel-Rallye geschafft!\n\n${state.name}${state.groupName ? ' (' + state.groupName + ')' : ''}\n${state.totalPoints} von ${maxPunkte} Punkten\n${STATIONEN.length} Stationen erkundet`;
+  const t = UI[state.lang];
+  const stations = STATIONEN[state.lang];
+  const maxPunkte = stations.reduce((sum, s) => sum + s.points, 0);
+  const text = `${t.shareIntro}\n\n${state.name}${state.groupName ? ' (' + state.groupName + ')' : ''}\n${state.totalPoints} / ${maxPunkte} ${t.sharePoints}\n${stations.length} ${t.shareStations}`;
 
   if (navigator.share) {
-    navigator.share({ title: 'Greetsiel-Rallye Ergebnis', text }).catch(() => {});
+    navigator.share({ title: t.shareTitle, text }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text);
+    alert(t.sharedToClipboard);
   } else {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text);
-      alert("Ergebnis in die Zwischenablage kopiert!");
-    } else {
-      alert(text);
-    }
+    alert(text);
   }
 }
 
